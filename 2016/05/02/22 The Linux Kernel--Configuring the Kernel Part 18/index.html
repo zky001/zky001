@@ -4,15 +4,15 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Hexo</title>
+  <title>PyEL</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="戴文的Linux内核专题：22 配置内核 (18)
 你好！准备好阅读下一篇文章了么？在本篇中，我们将会讨论辅助显示。辅助显示是一些小的LCD屏幕；大多数小于或等于128x64。接着，我们会讨论用户空间IO驱动，一些虚拟驱动，Hyper-V，开发中驱动，IOMMU，和其他一些内核特性。
 第一个配置辅助显示的驱动是”KS0108 LCD Controller”。KS0108 LCD Controlle">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo">
+<meta property="og:title" content="PyEL">
 <meta property="og:url" content="http://www.zky001.cn/2016/05/02/22 The Linux Kernel--Configuring the Kernel Part 18/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="PyEL">
 <meta property="og:description" content="戴文的Linux内核专题：22 配置内核 (18)
 你好！准备好阅读下一篇文章了么？在本篇中，我们将会讨论辅助显示。辅助显示是一些小的LCD屏幕；大多数小于或等于128x64。接着，我们会讨论用户空间IO驱动，一些虚拟驱动，Hyper-V，开发中驱动，IOMMU，和其他一些内核特性。
 第一个配置辅助显示的驱动是”KS0108 LCD Controller”。KS0108 LCD Controlle">
@@ -20,13 +20,13 @@
 <meta property="og:image" content="http://www.linux.org/attachments/kernel_18-png.617/">
 <meta property="og:updated_time" content="2015-12-01T03:16:33.961Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="PyEL">
 <meta name="twitter:description" content="戴文的Linux内核专题：22 配置内核 (18)
 你好！准备好阅读下一篇文章了么？在本篇中，我们将会讨论辅助显示。辅助显示是一些小的LCD屏幕；大多数小于或等于128x64。接着，我们会讨论用户空间IO驱动，一些虚拟驱动，Hyper-V，开发中驱动，IOMMU，和其他一些内核特性。
 第一个配置辅助显示的驱动是”KS0108 LCD Controller”。KS0108 LCD Controlle">
 <meta name="twitter:image" content="http://www.linux.org/attachments/slide-jpg.616/">
   
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="PyEL" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -50,6 +50,8 @@
 		  <h1 class="header-author"><a href="/">Markgolzh</a></h1>
 		</hgroup>
 
+		
+		<p class="header-subtitle">inzky001</p>
 		
 
 		
@@ -87,7 +89,7 @@
 						<li>Links</li>
 						
 						
-						<li>A propos</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -178,6 +180,8 @@
 			<hgroup>
 			  <h1 class="header-author">Markgolzh</h1>
 			</hgroup>
+			
+			<p class="header-subtitle">inzky001</p>
 			
 			<nav class="header-menu">
 				<ul>

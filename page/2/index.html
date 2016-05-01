@@ -4,19 +4,19 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Hexo</title>
+  <title>PyEL</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
+<meta property="og:title" content="PyEL">
 <meta property="og:url" content="http://www.zky001.cn/page/2/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="PyEL">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="PyEL">
 <meta name="twitter:description">
   
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="PyEL" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -40,6 +40,8 @@
 		  <h1 class="header-author"><a href="/">Markgolzh</a></h1>
 		</hgroup>
 
+		
+		<p class="header-subtitle">inzky001</p>
 		
 
 		
@@ -77,7 +79,7 @@
 						<li>Links</li>
 						
 						
-						<li>A propos</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -169,6 +171,8 @@
 			  <h1 class="header-author">Markgolzh</h1>
 			</hgroup>
 			
+			<p class="header-subtitle">inzky001</p>
+			
 			<nav class="header-menu">
 				<ul>
 				
@@ -197,6 +201,111 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-17 The Linux Kernel--Configuring the Kernel Part 13" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/02/17 The Linux Kernel--Configuring the Kernel Part 13/" class="article-date">
+  	<time datetime="2016-05-01T16:28:20.321Z" itemprop="datePublished">2016-05-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="戴文的Linux内核专题：17-配置内核-13"><a href="#戴文的Linux内核专题：17-配置内核-13" class="headerlink" title="戴文的Linux内核专题：17 配置内核 (13)"></a>戴文的Linux内核专题：17 配置内核 (13)</h1><p><img src="http://www.linux.org/attachments/slide-jpg.555/" alt=""></p>
+<p>你好!这是Linux内核系列的下一篇，我们仍将配置ATA设备并将进入逻辑卷/存储。</p>
+<p>“ATA SFF support (for legacy IDE and PATA)”应该启用，因为这扩展了ATA的能力。</p>
+<p>为了支持Pacific Digital的ADMA控制器，应该启用”Pacific Digital ADMA support”。</p>
+<p>“Pacific Digital Serial ATA QStor support”(串口ATA支持)在下一个驱动中支持</p>
+<p>Promise的SATA SX4设备在内核中支持(Promise SATA SX4 support (Experimental))。</p>
+<p>可以BMDMA的SFF ATA控制器需要这个驱动(ATA BMDMA support)。BMDMA代表总线主控直接内存访问(BMDMA stands for Bus-Master Direct Memory Access)。</p>
+<p>下面，这个驱动对不同的SATA和PATA控制器提供支持Intel ESB, ICH, PIIX3, PIIX4 PATA/SATA support)。</p>
+<p>这里有其他的特定设备驱动(Calxeda Highbank SATA support)、(Marvell SATA support)、(NVIDIA SATA support)、(Promise SATA TX2/TX4 support)、(Silicon Image SATA support)还有(SiS 964/965/966/180 SATA support)、(ServerWorks Frodo / Apple K2 SATA support)、(ULi Electronics SATA support)、(VIA SATA support)。。。由于有很多SATA/PATA控制器设计不同，一个通用驱动无法使用在这些设备上。</p>
+<p>接下来，这个驱动支持PC卡上的ATA设备除非有特定设备管理硬件的驱动(PCMCIA PATA support)。</p>
+<p>在这之后，有一个通用PATA驱动用于管理其他不被先前驱动支持的PATA设备 (Generic platform device PATA support)。</p>
+<p>PATA设备的电源消耗由这个ACPI驱动管理(ACPI firmware driver for PATA)。强烈建议对系统上所有的硬件启用ACPI。虽然这会增加内核的大小，但是ACPI会增强性能。</p>
+<p>“Generic ATA support”(通用ATA支持)由这个驱动提供。</p>
+<p>古老的ISA、VLB和PCI总线PATA设备可以通过这个驱动支持(Legacy ISA PATA support (Experimental))。这个古老支持使用新的ATA层。</p>
+<p>这组特性包含了许多对于RAID和LVM能力，可见下面的特性选项(Multiple devices driver support (RAID and LVM))。</p>
+<p>有趣的事实：内核是由C和汇编写成的。</p>
+<p>这个驱动允许RAID和LVM组合在一起。这用于使几个LVM卷使用RAID。分区被组合成逻辑块设备，然后形成RAID设备。</p>
+<p>许多用户会希望RAID可以在启动时侦测到(Autodetect RAID arrays during kernel boot)。如果你没有RAID，那么不要启用这个特性。不然，启动处理会比原先希望的慢上几秒。</p>
+<p>注意：当配置Linux内核时，最好按照”use it or lose it”(非用即失)的原则。那就是，如果你不用它，那就禁用这个特性。</p>
+<p>硬盘分区可以通过这个驱动加在一起(Linear (append) mode)。</p>
+<p>下面的驱动加入RAID-0支持带逻辑块设备中(RAID-0 (striping) mode)。接着还有 (RAID-1 (mirroring) mode)、(RAID-10 (mirrored striping) mode)和(RAID-4/RAID-5/RAID-6 mode)。</p>
+<p>MD框架需要多路径支持(Multipath I/O support)。MD框架就是多设备(Multi Device)框架,它将多台设备作为一个单元管理。举例来说，将许多存储单元的分区组合起来可以使多个设备就像一个那样。多路径支持是用于使用处理虚拟的有多个地址的”单个设备”。因为单存储单元物理上有多件物理设备，所以它有多个硬件地址。</p>
+<p>使用这个调试驱动，可以测试更大的多磁盘存储单元的bug(Faulty test module for MD)。</p>
+<p>“Device mapper support”是一个用来映射逻辑扇区的卷管理器。LVM使用扇区映射。</p>
+<p>如果启用的话，设备映射器可以有调试特性(Device mapper debugging support)。</p>
+<p>如果需要，逻辑设备可以设置加密数据(Crypt target support)。这个特性允许用户将来加密那些存储设备。</p>
+<p>只有启用了这个特性，才能使用逻辑存储单元的快照功能(Snapshot target)。</p>
+<p>“Thin provisioning”(自动精简配置)允许逻辑卷设置成比组成逻辑卷的物理设备拥有更大的存储容量(Thin provisioning target)。这个特性同样为这类设备提供了快照功能。这额外的虚拟数据空间无法马上使用。这个特性的意义是允许用户在将来增加物理存储单元并且节约了配置逻辑块设备的时间。</p>
+<p>用这个可以调试”Thin provisioning” (Keep stack trace of thin provisioning block lock holders)。</p>
+<p>块设备性能的提升可以通过移动更多的常用数据到更快的存储单元中(Cache target (EXPERIMENTAL))。</p>
+<p>卷管理器可以制成镜像逻辑卷(Mirror target)。</p>
+<p>设备映射器(Device-mapper (dm))单元支持映射RAID1、RAID10、 RAID4、RAID5和RAID6(RAID 1/4/5/6/10 target)。</p>
+<p>设备映射器(device-mapper)日志可以镜像到用户空间(Mirror userspace logging)。</p>
+<p>“Zero target”是一个忽视写入并返回读取为零的设备。</p>
+<p>接下来，卷管理器应该对硬件有多路径支持(Multipath target)。</p>
+<p>这个驱动会发现最有效的到存储设备的路径来读取和写入(I/O Path Selector based on the number of in-flight I/Os)。</p>
+<p>下面的一个驱动和以上相同，但是会寻找最快路径(I/O Path Selector based on the service time)。</p>
+<p>如果一个逻辑卷上的物理存储单元正忙，如果可能的话，这个特性会允许读取/写入到另一个物理卷上。</p>
+<p>udev可以生成设备管理器操作事件DM uevents)。udev是/dev的设备管理器。</p>
+<p>为了测试软件/硬件对偶尔失败的输入/输出任务的逻辑设备如何反映，启用这个调试特性(Flakey target)。</p>
+<p>逻辑卷可以创建为一个用于验证另一个逻辑分区数据的只读存储单元(Verity target support)。</p>
+<p>注意：如果你喜欢我的文章，并且如果你有Linux.org的账号，请在我的文章上点击”Like”。同样，再次分享这篇文章在Google、Twitter和/或者Facebook上。</p>
+<p>ConfigFS和TCM存储引擎可以通过这个设置启用(Generic Target Core Mod (TCM) and ConfigFS Infrastructure)。ConfigFS是一个基于内存的文件系统。</p>
+<p>有趣的事实：Linux内核没有”main()”函数。在程序中，main()被依赖于kernel的libc调用。内核没有main()函数是因为libc将无法启动内核。如果内核的确有main()函数，那么我们就有一个”鸡或者蛋”的问题-谁先来？另外，内核的入口点用汇编写成，这并不使用main()函数。</p>
+<p>下面，”TCM/IBLOCK Subsystem Plugin for Linux/BLOCK”可以禁用或者启用。</p>
+<p>接着”TCM/FILEIO Subsystem Plugin for Linux/VFS”可以启用/禁用。</p>
+<p>再次，还有两个TCM特性 - (TCM/pSCSI Subsystem Plugin for Linux/SCSI) 和 (TCM Virtual SAS target and Linux/SCSI LDD fabric loopback module)</p>
+<p>对于ConfigFS的”Linux-iSCSI.org iSCSI Target Mode Stack”在这个驱动中支持(Linux-iSCSI.org iSCSI Target Mode Stack)。</p>
+<p>下一步，可以启用/禁用”FireWire SBP-2 fabric module”。这允许一台计算机作为一个硬盘连接到另一台计算机上。</p>
+<p>在这之后，我们可以配置”Fusion Message Passing Technology (MPT) device support”。</p>
+<p>在那个标题下的第一个选项是一个用于并口适配器的SCSI支持的驱动(Fusion MPT ScsiHost drivers for SPI)。</p>
+<p>SCSI同样也可以支持光纤通道主机适配器(Fusion MPT ScsiHost drivers for FC)和/或SAS适配器(Fusion MPT ScsiHost drivers for SAS)。</p>
+<p>下一步，用户可以设置”Maximum number of scatter gather entries”。一个低的数值可以减少每个控制器实例的内存消耗。</p>
+<p>下一个驱动提供了ioctl系统调用来管理MPT适配器(Fusion MPT misc device (ioctl) driver)。</p>
+<p>光纤通道端口可以用这个驱动支持IP LAN的流量(Fusion MPT LAN driver)。</p>
+<p>我可以读到你们的想法-你们会想到对于这个还有另外一篇文章。是的，你们想对了。请继续关注这个系列的下一篇文章。</p>
+<p>如果你喜欢这个系列，请在Linux.org和/或者Google+上发表评论告诉我你有多喜欢这个系列，并且告诉我你想在今后的文章中希望看到的方面。或者给我发邮件DevynCJohnson@Gmail.com)。谢谢！</p>
+<p>想要更多地了解作者，请检查下面的签名栏中的链接(译注：原文所在论坛有)</p>
+<p>如果你已经完整地阅读了这篇文章，那么你应该已经看到单词”Facebook”三次了。如果没有，你没有阅读全部文章。</p>
+<p>单词”Facebook”在这段中，上一段，和一个注解中。我打赌你阅读了上面的段落而没有通读文章来试图寻找第三个单词实例。</p>
+<hr>
+<p>via: <a href="http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-13.4714/" target="_blank" rel="external">http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-13.4714/</a></p>
+<p>译者：<a href="https://github.com/geekpi" target="_blank" rel="external">geekpi</a> 校对：<a href="https://github.com/wxy" target="_blank" rel="external">wxy</a></p>
+<p>本文由 <a href="https://github.com/LCTT/TranslateProject" target="_blank" rel="external">LCTT</a> 原创翻译，<a href="http://linux.cn/" target="_blank" rel="external">Linux中国</a> 荣誉推出</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-16 The Linux Kernel--Configuring the Kernel Part 12" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -672,70 +781,9 @@
 
 
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/05/01/hello-world/" class="article-date">
-  	<time datetime="2016-05-01T12:39:31.753Z" itemprop="datePublished">2016-05-01</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/01/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 </div>
