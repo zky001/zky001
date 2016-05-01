@@ -77,7 +77,7 @@
 						<li>Links</li>
 						
 						
-						<li>About</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -198,11 +198,11 @@
 
       <div class="body-wrap">
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-27 The Linux Kernel--Configuring the Kernel Part 23" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/05/01/hello-world/" class="article-date">
-  	<time datetime="2016-05-01T12:39:31.753Z" itemprop="datePublished">2016-05-01</time>
+      <a href="/2016/05/02/27 The Linux Kernel--Configuring the Kernel Part 23/" class="article-date">
+  	<time datetime="2016-05-01T16:28:20.347Z" itemprop="datePublished">2016-05-02</time>
 </a>
     </div>
   
@@ -211,28 +211,62 @@
       <input type="hidden" class="isFancy" />
     
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/01/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-      
-    
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+        <h1 id="戴文的Linux内核专题：27-配置内核-23"><a href="#戴文的Linux内核专题：27-配置内核-23" class="headerlink" title="戴文的Linux内核专题：27 配置内核 (23)"></a>戴文的Linux内核专题：27 配置内核 (23)</h1><p><img src="http://www.linux.org/attachments/slide-jpg.735/.jpg" alt=""></p>
+<p>欢迎来到内核配置的下一章！本篇中我们会配置密码API，虚拟化和运行库。密码学指的是在需要的计算机之间加密和安全通信的科学。用户可能加密数据以保证是收件人而不是黑客收到数据。</p>
+<p>Linux内核需要在内核中启用”Cryptographic algorithm manager”(密码算法管理器)。这个特性提供了操作内核的加密特性所需的软件。</p>
+<p>当启用这个它，用户空间提供了配置加密特性(Userspace cryptographic algorithm configuration)。注意:这个配置指的是内核运行时的加密设置，不是编译内核的工具。</p>
+<p>为了加强性能，启用这个会在加密算法中停止自我检测的特性 (Disable run-time self tests)。</p>
+<p>“GF(2^128) multiplication functions”是一种被一些密码使用特殊算法。GF代表的是” Galois field”(伽罗瓦域)，是一种有限数的集合。这写集合称之为域并且有不同的大小。</p>
+<p>“Null algorithms”是用于IPSec的算法。NULL加密意味这没有加密，因此这个驱动允许IPSec不使用加密。</p>
+<p>任意算法可以转换成并行算法(Parallel crypto engine)。这个特性提供了转换器。</p>
+<p>任意算法同样可以转换成异步算法(Software async crypto daemon)。</p>
+<p>IPsec需要”Authenc support”。”Authenc support”代表”Authenticated Encryption and offers multiple encryptions to IPsec”(认证加密并对IPSec提供多重加密)。</p>
+<p>CCM代表的是”Counter with CBC MAC”(CBC MAC计数器)，IPSec需要它(CCM support)。</p>
+<p>这个驱动提供了”GCM/GMAC support”。GCM意思是”Galois/Counter Mode”(伽罗瓦/计数器 模式)，GMAC是”Galois Message Authentication Code”(伽罗瓦消息验证码)。</p>
+<p>注意：我不会明确地解释一些特性的使用和细节。密码学是计算机中的特定领域，解释加密学超出了这篇文章的范围。</p>
+<p>“Sequence Number IV Generator”是一个被某些加密软件使用的特殊的号码生成器。</p>
+<p>Linux内核提供了不同的密码算法(CBC support)、 (CTR support)、 (CTS support)、 (ECB support)、 (LRW support)、 (PCBC support)、 (XTS support)、 (HMAC support)、 (XCBC support) 和 (VMAC support)。</p>
+<p>“CRC32c CRC algorithm” 明确被SPARC64处理器使用。</p>
+<p>“CRC32c INTEL hardware acceleration”是另外一个特定处理器的算法。它工作于带SSE4.2的Intel处理器。</p>
+<p>内核提供了很多摘要、密码和其他加密软件。通常上，默认允许它们除非你有特殊的理由来启用或禁用这些特性。</p>
+<p>注意：摘要(像MD5)会基于一个文件生成一个哈希值(字符序列)。哈希值接着被用于检查文件。比如，如果你从Canonical网站上下载了Ubuntu ISO安装盘，你可能想要知道你硬盘上的文件就是服务器上的文件的复制品。用户这么做的原因是ISO可能在长时间下载中被损坏。哈希值被用来证明文件没有被改变。</p>
+<p>注意：密码是一种加密/解密算法。加密是使文件对除了接受者/拥有者之外的人都不可读。解密是浏览加密文件的过程。</p>
+<p>Linux内核同样支持用户被强烈建议启用的不同的压缩算法(Deflate compression algorithm)、 (Zlib compression algorithm)  和 (LZO compression algorithm)。</p>
+<p>内核可以生成用于加密软件的随机数(Pseudo Random Number Generation for Cryptographic modules)、(User-space interface for hash algorithms) 和 (User-space interface for symmetric key cipher algorithms)。</p>
+<p>“Hardware crypto devices”是一个子菜单，包含了基于硬件加密工具的驱动。这个硬件在固件中含有算法。</p>
+<p>“Asymmetric (public-key cryptographic) key type” 菜单中存在着不同的非对称公开密钥。</p>
+<p>下面，我们可以进入配置工具主菜单(基于菜单接口)的下一个入口。虚拟化是寄放一个操作系统的<br>能力。这意味这Linux(和其他的系统)可以运行其他的操作系统，仿佛客户机是一个应用一样。</p>
+<p>“Kernel-based Virtual Machine (KVM) support”运行内核本身管理客户机。带Intel处理器的计算机需呀这个驱动(KVM for Intel processors support)，AMD的则需要(KVM for AMD processors support)。</p>
+<p>用于内核虚拟机(KVM)的内存管理单元(MMU)可以有一个审计系统。</p>
+<p>启用这个特性使客户机的网络变得更快(Host kernel accelerator for virtio net)。</p>
+<p>在配置哇内核虚拟机特性后，配置工具主菜单下的最后菜单是内核配置的最后一部分。这个菜单用于”Library Routines”(库运行时)，同样也成为库函数。一部分内核可以被作为可以链接的库。比如，XZ过滤(压缩算法)可以被外部程序访问。下面列出了不同的库。</p>
+<p>注意：CRC函数大多数都相同但有不同的特性和性能，通常来讲，最好启用这些特性。</p>
+<p>CRC-CCITT functions - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC16 functions - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC calculation for the T10 Data Integrity Field - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC ITU-T V.41 functions - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC32/CRC32c functions - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC32 perform self test on init - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC32 implementation (Slice by 8 bytes) - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC7 functions - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC32c (Castagnoli, et al) Cyclic Redundancy-Check - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC8 function - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>* BCJ filter decoder - 为特定处理器设计的XZ解码器，这里的”*”是处理器。内核列出了一些不同的架构。</p>
+<p>XZ decompressor tester - 用于测试XZ解码器的调试函数。</p>
+<p>Averaging functions - “uptime”在”uptime”中看到的平均负载。</p>
+<p>CORDIC algorithm - 双曲线和三角函数。</p>
+<p>JEDEC DDR data - JEDEC双倍数据速率SD-RAM规范</p>
+<p>你猜怎么了？我们已经完成配置内核。在23篇之后，我敢肯定这是你的感觉 -</p>
+<p>视频链接:<a href="http://www.youtube.com/embed/barWV7RWkq0?wmode=opaque" target="_blank" rel="external">http://www.youtube.com/embed/barWV7RWkq0?wmode=opaque</a></p>
+<p>下面，我们可以编译并安装了</p>
+<p>在遥远的地方，我仍然在听 - </p>
+<p>视频链接:<a href="http://www.youtube.com/embed/ELoUppY1esw?wmode=opaque" target="_blank" rel="external">http://www.youtube.com/embed/ELoUppY1esw?wmode=opaque</a></p>
+<hr>
+<p>via: <a href="http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-23.5112/" target="_blank" rel="external">http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-23.5112/</a></p>
+<p>译者：<a href="https://github.com/geekpi" target="_blank" rel="external">geekpi</a> 校对：<a href="https://github.com/wxy" target="_blank" rel="external">wxy</a></p>
+<p>本文由 <a href="https://github.com/LCTT/TranslateProject" target="_blank" rel="external">LCTT</a> 原创翻译，<a href="http://linux.cn/" target="_blank" rel="external">Linux中国</a> 荣誉推出</p>
 
       
     </div>
@@ -259,6 +293,508 @@
 
 
   
+    <article id="post-23 The Linux Kernel--Configuring the Kernel Part 19" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/02/23 The Linux Kernel--Configuring the Kernel Part 19/" class="article-date">
+  	<time datetime="2016-05-01T16:28:20.338Z" itemprop="datePublished">2016-05-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="戴文的Linux内核专题：23-配置内核-19"><a href="#戴文的Linux内核专题：23-配置内核-19" class="headerlink" title="戴文的Linux内核专题：23 配置内核 (19)"></a>戴文的Linux内核专题：23 配置内核 (19)</h1><p><img src="http://www.linux.org/attachments/slide-jpg.626/.jpg" alt=""></p>
+<p>欢迎进入Linux内核系列文章的下一篇！我们正在接近配置过程的终点。在这篇文章中，我们将会讨论固件驱动和文件系统驱动。</p>
+<p>这个分类中的第一个驱动是寻找启动盘(BIOS Enhanced Disk Drive calls determine boot disk)。有时，Linux不会知道哪个盘是启动盘。这个驱动允许内核询问BIOS。Linux接着在sysfs上存储信息。Linux需要知道这些来设置bootloader。</p>
+<p>即使BIOS EDD服务被编译进了内核，这个选项可以设置这些服务不激活(Sets default behavior for EDD detection to off )。EDD代表的是”Enhanced Disk Drive”(增强磁盘驱动器)。</p>
+<p>当使用kexec加载不同的内核时，性能可以通过固件提供的内存映射提升(Add firmware-provided memory map to sysfs)。</p>
+<p>“Dell Systems Management Base Driver”通过sysfs接口提供了Linux内核对于Dell硬件的更好的控制。</p>
+<p>启用这个驱动可以通过/sys/class/dmi/id/访问硬件的信息(Export DMI identification via sysfs to userspace)。DMI代表的是Desktop Management Interface(桌面管理接口)。DMI管理硬件的组件和访问硬件的数据。BIOS中数据的接口和硬件由SMBIOS(System Management BIOS)规范调节。</p>
+<p>从DMI得到的原始数据表可以通过这个驱动访问(DMI table support in sysfs)。</p>
+<p>为了从iSCSI驱动器中启动，启用这个驱动(DMI table support in sysfs)。</p>
+<p>最后的驱动是一组”Google Firmware Drivers”。这些驱动用于Google特定的硬件。除非你为Google工作并且需要在硬件上使用Linux或者你在为一台从Google偷来的电脑编译内核，否则不要启用它。</p>
+<p>下面，我们可以配置内核的文件系统支持。</p>
+<p>“Second extended fs support”驱动用于EXT2文件系统。<a href="http://www.linux.org/threads/ext-file-system.4365/" target="_blank" rel="external">http://www.linux.org/threads/ext-file-system.4365/</a></p>
+<p><img src="http://www.linux.org/attachments/kernel_19-png.627/" alt=""></p>
+<p>“Ext2 extended attributes”提供了原生文件系统不支持的额外的元数据的使用。</p>
+<p>“Ext2 POSIX Access Control Lists”增加了额外的非原生的权限模型。</p>
+<p>“Ext2 Security Labels”增强了由SELinux提供的安全性。</p>
+<p>启用”Ext2 execute in place support”允许可执行文件在当前的位置执行而不必在页缓存中执行。</p>
+<p>这个驱动提供EXT3文件系统(Ext3 journaling file system support)。 <a href="http://www.linux.org/threads/ext-file-system.4365/" target="_blank" rel="external">http://www.linux.org/threads/ext-file-system.4365/</a></p>
+<p>“Default to ‘data=ordered’ in ext3”驱动设置数据的排序模式为”Ordered”。这种处理方式为日志和写入工作。数据排序在这篇文章中解释 - <a href="http://www.linux.org/threads/journal-file-system.4136/" target="_blank" rel="external">http://www.linux.org/threads/journal-file-system.4136/</a></p>
+<p>“Ext3 extended attributes”提供了原生文件系统不支持的额外的元数据使用。再说一次，接下来的EXT3的驱动/特性与EXT2相同 - “Ext3 POSIX Access Control Lists” 和 “Ext3 Security Labels”。同样，对接下来的EXT4也是相同的 - “Ext4 POSIX Access Control Lists”、”Ext4 Security Labels” 和 “EXT4 debugging support”。</p>
+<p>EXT3和EXT4支持日志块设备调试(JBD debugging support)，(JBD2 debugging support)。</p>
+<p>下面的驱动提供Reiser文件系统支持(Reiserfs support)。 <a href="http://www.linux.org/threads/reiser-file-system-reiser3-and-reiser4.4403/" target="_blank" rel="external">http://www.linux.org/threads/reiser-file-system-reiser3-and-reiser4.4403/</a></p>
+<p>Reiser文件系统也有调试(Enable reiserfs debug mode)。</p>
+<p>内核可以存储ReiserFS统计在/proc/fs/reiserfs (Stats in /proc/fs/reiserfs)。</p>
+<p>下面的Reiser驱动/特性与EXT2/3/4相同 - ReiserFS extended attributes”, “ReiserFS POSIX Access Control Lists” 和 “ReiserFS Security Labels”.</p>
+<p>Linux内核同样支持JFS，同时也包含了不同的特性 “JFS filesystem support”、 “JFS POSIX Access Control Lists”、”JFS Security Labels”、”JFS debugging” 和 “JFS statistics”. <a href="http://www.linux.org/threads/journaled-file-system-jfs.4404/" target="_blank" rel="external">http://www.linux.org/threads/journaled-file-system-jfs.4404/</a></p>
+<p>再说一次,XFS可以通过启用这些驱动/特性支持 - “XFS filesystem support”、”XFS Quota support”、”XFS POSIX ACL support”、”XFS Realtime subvolume support” 和 “XFS Debugging support”。 <a href="http://www.linux.org/threads/xfs-file-system.4364/" target="_blank" rel="external">http://www.linux.org/threads/xfs-file-system.4364/</a></p>
+<p>“Global FileSystem 2”可以被内核支持(GFS2 file system support)。这个文件系统用于在集群中共享存储。</p>
+<p>“GFS2 DLM locking”驱动提供了GFS2的分布式锁管理(DLM)</p>
+<p>“Oracle Cluster FileSystem 2”被内核支持(OCFS2 file system support)。这个文件系统用于在集群中共享存储。</p>
+<p>“O2CB Kernelspace Clustering”提供了OCFS2文件系统的不同服务。</p>
+<p>“OCFS2 Userspace Clustering”允许集群栈在用户空间执行。</p>
+<p>“OCFS2 statistics”驱动允许用户得到关于文件系统的统计信息。</p>
+<p>像大多树Linux内核一样，OCFS2提供日志(OCFS2 logging support)。这可能被用来监视错误或者调试目的。</p>
+<p>“OCFS2 expensive checks”驱动以性能为代价提供了存储一致性检测。一些Linux用户建议只有在调试目的在才启用它。</p>
+<p>Linux内核同样包含了新的B树文件系统；这个驱动提供了磁盘格式化程序(Btrfs filesystem Unstable disk format)。BTRFS仍在开发中并被计划某天变的比EXT4更流行。<a href="http://www.linux.org/threads/b-tree-file-system-btrfs.4430/" target="_blank" rel="external">http://www.linux.org/threads/b-tree-file-system-btrfs.4430/</a></p>
+<p>“Btrfs POSIX Access Control Lists”提供了额外的原生BTRFS没有提供的权限模型。</p>
+<p>下面，是一个BTRFS检测工具(Btrfs with integrity check tool compiled in (DANGEROUS))。由于BTRFS是一个最新在开发中的文件系统，大多数相关软件还并不稳定。</p>
+<p>Linux系统也支持NIL-FileSystem(NILFS2 file system support)。<a href="http://www.linux.org/threads/new-implementation-of-a-log-structured-file-system-nilfs.4547/" target="_blank" rel="external">http://www.linux.org/threads/new-implementation-of-a-log-structured-file-system-nilfs.4547/</a>。</p>
+<p>为了支持一些文件系统使用到的flock()系统调用，启用这个驱动(Enable POSIX file locking API)。禁用这个去的那个会减少11KB的内核大小。这个驱动提供了文件锁定。文件锁定是一个允许进程在某刻读取文件的过程。这通常用于网络文件系统，就像NFS。</p>
+<p>“Dnotify support”驱动是一个古老的文件系统通知系统，它提醒文件系统上的事件的用户空间。它和它的继承者被用于监控应用的文件系统。某个应用告诉守护进程需要监视哪些事件。不然，每个用户空间应用需要它们自己完成这个任务。</p>
+<p>记住，Dnotify是一个古老的系统，那么什么是新的通知系统？它就是由这个驱动提供的Inotify (Inotify support for userspace)。</p>
+<p>一个可选的通知系统是fanotify (Filesystem wide access notification)。Fanotify与Inotify一样，但是fanotify比Inotify传递更多的信息到用户空间中。</p>
+<p>用这个驱动Fanotify可以检测权限(fanotify permissions checking)。</p>
+<p>对于用户想要划分存储空间的系统需要 “Quota support”。 <a href="http://www.linux.org/threads/atomic-disk-quotas.4277/" target="_blank" rel="external">http://www.linux.org/threads/atomic-disk-quotas.4277/</a></p>
+<p>接下来的驱动允许通过netlink报告磁盘配额警告和信息(Report quota messages through netlink interface)。netlink是一个用于与内核通信的用户空间的套接字接口。</p>
+<p>配额信息同样可以发送到控制台(Print quota warnings to console (OBSOLETE))。</p>
+<p>这个驱动允许配额系统执行额外的完整性检查(Additional quota sanity checks)。在计算机技术中，完整性检查是检测由于不良编程导致的错误。文件和输出都被检查来确保数据正确而不是以奇怪的方式构造。</p>
+<p>一些旧的系统使用老的配额系统但希望在升级新内核时保留旧的配额系统。可以通过启用这个来容易解决(Old quota format support)。许多读者可能想要知道为什么一些人想要保留旧的配额系统而不是更新新的。好的，想想一下你是一家很大公司的IT部门的经理，公司有许多服务器运行着非常重要的任务。当你可以继续使用现在工作的很好的系统，你想要创建并配置一个新的(也可能很大)的文件系统么？ 通常上，对于计算机，坚持下面的原则 - 如果它没有坏或者不会导致安全问题，不要去修复它。</p>
+<p>用这个驱动，新的配额系统支持32位UID和GID(Quota format vfsv0 and vfsv1 support)。</p>
+<p>为了自动挂载远程存储单元，启用这个驱动(Kernel automounter version 4 support)。</p>
+<p>这个驱动支持FUSE文件系统(FUSE (Filesystem in Userspace) support)。用户空间文件系统(FUSE)支持任何用户创建他们自己的文件系统并在用户空间内使用。</p>
+<p>一个特殊的FUSE扩展可以用于在用户空间使用字符设备Character device in Userspace support)。</p>
+<p>下一篇文章中，我们会继续讨论缓存，光盘文件系统，Linux上的FAT32和其他有趣的文件系统话题。谢谢！</p>
+<hr>
+<p>via: <a href="http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-19.4929/" target="_blank" rel="external">http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-19.4929/</a></p>
+<p>译者：<a href="https://github.com/geekpi" target="_blank" rel="external">geekpi</a> 校对：<a href="https://github.com/wxy" target="_blank" rel="external">wxy</a></p>
+<p>本文由 <a href="https://github.com/LCTT/TranslateProject" target="_blank" rel="external">LCTT</a> 原创翻译，<a href="http://linux.cn/" target="_blank" rel="external">Linux中国</a> 荣誉推出</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-22 The Linux Kernel--Configuring the Kernel Part 18" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/02/22 The Linux Kernel--Configuring the Kernel Part 18/" class="article-date">
+  	<time datetime="2016-05-01T16:28:20.334Z" itemprop="datePublished">2016-05-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="戴文的Linux内核专题：22-配置内核-18"><a href="#戴文的Linux内核专题：22-配置内核-18" class="headerlink" title="戴文的Linux内核专题：22 配置内核 (18)"></a>戴文的Linux内核专题：22 配置内核 (18)</h1><p><img src="http://www.linux.org/attachments/slide-jpg.616/" alt=""></p>
+<p>你好！准备好阅读下一篇文章了么？在本篇中，我们将会讨论辅助显示。辅助显示是一些小的LCD屏幕；大多数小于或等于128x64。接着，我们会讨论用户空间IO驱动，一些虚拟驱动，Hyper-V，开发中驱动，IOMMU，和其他一些内核特性。</p>
+<p>第一个配置辅助显示的驱动是”KS0108 LCD Controller”。KS0108 LCD Controller是由三星制造的图形控制器。</p>
+<p>下面可以设置LCD并口地址(Parallel port where the LCD is connected)。第一个并口地址是0x378，下一个是0x278，第三个是0x3BC。这些不是地址唯一的选择。大多数人不需要改变这个。shell命令”cat /proc/ioports”会列出可用的并口和地址。</p>
+<p>内核可以设置KS0108 LCD 控制器的写入延时到并口(Delay between each control writing (microseconds))。默认的值大部分是正确的，因此一般不需要更改。</p>
+<p>“CFAG12864B LCD”屏幕是一块128x64，双色LCD屏幕。这块屏幕依赖于KS0108 LCD控制器。</p>
+<p>可以改变这些LCD屏幕的刷新率(Refresh rate (hertz))。通常上，更高的刷新率会导致更多的CPU活动。这意味着一个缓慢的系统需要一个更低的刷新率。</p>
+<p>设置完辅助显示后，接着设置”Userspace I/O drivers”。用户空间系统允许用户的应用和进程访问内核中断和内存地址。启用了它，一些驱动可以放在用户空间。</p>
+<p>“generic Hilscher CIF Card driver”用于Profibus卡和Hilscher CIF卡。</p>
+<p>“Userspace I/O platform driver”在用户空间创建通用驱动系统。</p>
+<p>下一个驱动和上面的相同，但是增加IRQ处理(Userspace I/O platform driver with generic IRQ handling)。</p>
+<p>下面的驱动又像前面的一个，但是增加了动态内存支持(Userspace platform driver with generic irq and dynamic memory)。</p>
+<p>下面，是一些供应商/设备特性的驱动。</p>
+<p>接着是一些通用PCI/PCIe卡驱动(Generic driver for PCI 2.3 and PCI Express cards)。</p>
+<p>下面的驱动用于”VFIO support for PCI devices”。VFIO代表Virtual Function Input/Output(虚拟功能输入/输出)。VFIO允许设备直接以安全方式访问用户空间。</p>
+<p>“VFIO PCI support for VGA devices”允许VGA通过VFIO被PCI支持。</p>
+<p>接下来是virtio驱动。virtio是一个IO虚拟化平台。这个虚拟软件用于操作系统虚拟化。这在Linux系统上的虚拟机上运行一个操作系统时需要。</p>
+<p>我们第一个可以配置的virtio驱动是”PCI driver for virtio devices”。这允许虚拟访问PCI</p>
+<p>“Virtio balloon driver”允许虚拟系统的内存根据需要扩展或减少。通常上，没有人希望在需要内存的时候，虚拟系统保留它可能不会使用的内存。</p>
+<p>下面的驱动允许内存映射到virtio设备(Platform bus driver for memory mapped virtio devices)。</p>
+<p>如果Linux内核需要运行在微软的Hyper-V系统上，那么启用这个驱动(Microsoft Hyper-V client drivers)。这允许Linux能够成为Hyper的访客/客户端系统。</p>
+<p><img src="http://www.linux.org/attachments/kernel_18-png.617/" alt=""></p>
+<p>下面，我们会配置处于开发阶段的驱动。这些驱动正在开发当中，可能会变化很快，或者还没到Linux内核的质量标准。这个分类中的驱动只有Android驱动(在内核3.9.4中)。是的，Andorid使用Linux内核，这使得Andorid变成了一个Linux系统。然而，这仍然有争议。如果内核是用于Android，那么最好启用所有的驱动。</p>
+<p>“Android Binder IPC Driver”提供了对于Binder的支持，它允许Andorid系统进程间相互通信。</p>
+<p>下面可以启用ashmen驱动(Enable the Anonymous Shared Memory Subsystem)。Ashmem代表”Anonymous SHared MEMory”(虚拟内存共享)或者”Android SHared MEMory”(Andorid共享内存)。</p>
+<p>“Android log driver”提供了完整的Andorid日志系统。</p>
+<p>“Timed output class driver” 和 “Android timed gpio driver”允许Andorid系统操作GIP引脚并在超时后取消操作。</p>
+<p>“Android Low Memory Killer”会在需要更多内存关闭进程。这个特性会杀死不再使用或活跃的任务。</p>
+<p>“Android alarm driver”使内核在设定的间隔后唤醒。</p>
+<p>在配置完开发阶段的驱动后，下面的驱动用于X86平台。这些驱动是 X86 (32-bit)的供应商/设备特定硬件。</p>
+<p>下一个驱动是”Mailbox Hardware Support”。这个框架控制邮箱队列和硬件邮箱系统的中断信号。</p>
+<p>“IOMMU Hardware Support”链接内存到能够使用DMA的设备上。IOMMU增强了DMA。IOMMU映射地址并阻止故障设备访问内存。IOMMU同样允许硬件访问比没有IOMMU更多内存。</p>
+<p>“AMD IOMMU support”提供了对AMD设备更好的IOMMU支持。</p>
+<p>对于AMD IOMMU支持存在调试特性(Export AMD IOMMU statistics to debugfs)。</p>
+<p>存在一个对于AMD硬件的更新版本的IOMMU驱动(AMD IOMMU Version 2 driver)。</p>
+<p>Linux内核同样支持对Intel设备的IOMMU驱动支持(Support for Intel IOMMU using DMA Remapping Devices)。</p>
+<p>一些设备可能会接受不同的电压和时钟频率。这个驱动允许操作系统控制设备的电压输出和时钟频率(Generic Dynamic Voltage and Frequency Scaling (DVFS) support)。启用了这个驱动，可以启用下面的那些对于电源/性能管理特性。</p>
+<p>“Simple Ondemand”就像上面的，但是只会基于设备活动改变时钟频率。通常上，更多的活动意味着设备需要更快的时钟速率来使用更多的资源需求。</p>
+<p>“Performance”允许系统设置最高支持的时钟速度以满足最好的性能。这会增加电源消耗。</p>
+<p>“Powersave”会设置时钟频率到最低以节约电源。</p>
+<p>“Userspace”允许用户空间设置时钟频率。</p>
+<p>“External Connector Class (extcon) support”使得用户空间可以监视外部连接器如USB和AC口。这允许应用了解是否插入了线缆。用户几乎都希望启用这个。如果任何人由于某个合理的理由禁用了它，请告诉我们为什么这么做。</p>
+<p>“GPIO extcon support”驱动就像上面的驱动，但是它只对于GPIO管脚。</p>
+<p>接下来是不同的供货商/设备特定的内存控制器(Memory Controller drivers)。内存芯片控制器可能是独立的设备或者内置在内存芯片上。这些控制器管理这输入和输出的数据流。</p>
+<p>“Industrial I/O support”驱动提供了标准的传感器接口而不管总线的类型(像PCIe、spi、GPIO等等)。IIO是”Industrial I/O support”(工业IO)的通用缩写。</p>
+<p>Linux内核提供了大量不同的加速器、放大器模数转换器、惯性测量单元、光敏传感器、磁场传感器和其他许多传感器和转换器的支持。</p>
+<p>“Intel Non-Transparent Bridge support”驱动支持连接到系统的PCIe硬件桥。所有到映射内存的写入会镜像到两个系统中。</p>
+<p>“VME bridge support”和上面的相同除了桥使用的是VME，这是一个不同的总线标准。</p>
+<p>“Pulse-Width Modulation (PWM) Support”通过调节从这些设备收到的平均功率调节背光灯和风扇速度。</p>
+<p>“IndustryPack bus support”提供了对IndustryPack总线标准的支持。</p>
+<p>下一篇文章，我们会继续配置固件驱动。谢谢!</p>
+<hr>
+<p>via: <a href="http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-18.4896/" target="_blank" rel="external">http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-18.4896/</a></p>
+<p>译者：<a href="https://github.com/geekpi" target="_blank" rel="external">geekpi</a> 校对：<a href="https://github.com/wxy" target="_blank" rel="external">wxy</a></p>
+<p>本文由 <a href="https://github.com/LCTT/TranslateProject" target="_blank" rel="external">LCTT</a> 原创翻译，<a href="http://linux.cn/" target="_blank" rel="external">Linux中国</a> 荣誉推出</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-20 The Linux Kernel--Configuring the Kernel Part 16" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/02/20 The Linux Kernel--Configuring the Kernel Part 16/" class="article-date">
+  	<time datetime="2016-05-01T16:28:20.328Z" itemprop="datePublished">2016-05-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="戴文的Linux内核专题：20-配置内核-16"><a href="#戴文的Linux内核专题：20-配置内核-16" class="headerlink" title="戴文的Linux内核专题：20 配置内核 (16)"></a>戴文的Linux内核专题：20 配置内核 (16)</h1><p><img src="http://www.linux.org/attachments/slide-jpg.587/" alt=""></p>
+<p>欢迎来到下一篇Linux内核文章。在本篇里，我们将讨论输入/输出端口。</p>
+<p>首先，PS/2鼠标和AT键盘需要”i8042 PC Keyboard controller”驱动。在USB之前，鼠标和键盘使用圆形端口的PS/2端口。AT键盘是一种84键使用AT端口的IBM键盘。AT端口有5针而PS/2口有六针。</p>
+<p>使用COM口(有时也称RS232串口)的输入设备需要这个驱动(Serial port line discipline)。COM是一种串口，意味着每次传输一位。</p>
+<p>TravelMate笔记本需要这个特殊的驱动来使用连接到QuickPort的鼠标(ct82c710 Aux port controller)。</p>
+<p>对于PS/2 mice、AT keyboards 和 XT keyboards的并口适配器使用这个驱动(Parallel port keyboard adapter)。</p>
+<p>“PS/2 driver library”用于PS/2鼠标和AT键盘。</p>
+<p>可以启用”Raw access to serio ports”来允许设备文件作为字符文件来使用。</p>
+<p>下面，下面有一个用于”Altera UP PS/2 controller”的驱动。</p>
+<p>PS/2复用同样需要一个驱动(TQC PS/2 multiplexer)。</p>
+<p>ARC FPGA平台对于PS/2控制器需要特殊的驱动(ARC PS/2 support)。</p>
+<p>注意：我想要说清楚这篇文章中讨论的PS/2控制器并不是Sony的PlayStation上的游戏控制器。这篇文章讨论的是6针鼠标/键盘端口。控制器是一种有PS/2端口的卡。</p>
+<p>“Gameport support”提供对15针gameport的支持。gameport是一种曾经被很多游戏设备使用直到USB端口的发明的15针口。</p>
+<p>下一个驱动是在ISA或者PnP总线卡上的gameport驱动(Classic ISA and PnP gameport support)。ISA代表”Industry Standard Architecture”(工业标准架构)并且它是一种在PCI之前的并行总线标准。PnP代表”Plug-and-Play”(即插即用)并且他是一种在ISA之前的通用标准。</p>
+<p>“PDPI Lightning 4 gamecard support”提供了一个有gameport的游戏卡的专有驱动。</p>
+<p>SoundBlaster Audigy卡是一种专有gameport卡(SB Live and Audigy gameport support)。</p>
+<p>ForteMedia FM801 PCI音频控制器在卡上有一个音频控制器(ForteMedia FM801 gameport support)。这个驱动只支持gameport。</p>
+<p>下一步，我们可以进入”Character devices”。字符设备以字符传输数据。</p>
+<p>首先，可以启用/禁用TTY(Enable TTY)。移除TTY会节约很多空间，但是许多终端和这类设备需要TTY。除非你知道你在做什么，否则不要禁用TTY。</p>
+<p>致我的粉丝：如果你知道一个禁用TTY的理由，你能在下面发表你的答案并与我们共享么?谢谢！</p>
+<p>下一步，可以启用/禁用”Virtual terminals”(虚拟终端)。再说一次，这个可以节约很多空间，但是虚拟终端很重要。</p>
+<p>下一个驱动支持字体映射和Unicode转换(Enable character translations in console)。这用于转换ASCII到Unicode。</p>
+<p>虚拟终端可以用这个驱动作为系统控制台(Support for console on virtual terminal)。系统控制台管理着登陆和内核信息/警告。</p>
+<p>虚拟终端必须通过控制台驱动与物理终端交互(Support for binding and unbinding console drivers)。在虚拟终端可用之前，控制台驱动必须被加载。当虚拟终端关闭后，控制台终端必须被卸载。</p>
+<p>下一个驱动提供了对Unix98 PTY驱动的支持(Unix98 PTY support)。这是Unix98伪终端。</p>
+<p>有趣的事实：Linux内核允许某个文件系统一次在很多地方被多次挂载。</p>
+<p>接下来，可以支持”Support multiple instances of devpts”(译注：允许多个”devpts”文件系统实例）。devpts文件系统用于伪终端的slave。</p>
+<p>过时的PTY同样可以启用(Legacy (BSD) PTY support)。</p>
+<p>可以设置最大数量的使用中的过时PTS(Maximum number of legacy PTY in use)。</p>
+<p>下面的驱动可以用于提供对其他驱动不支持的串口的支持 (Non-standard serial port support)。</p>
+<p>下面有一些用于特定板和卡的驱动。</p>
+<p>这个驱动支持GSM MUX协议(GSM多路复用)(GSM MUX line discipline support (EXPERIMENTAL))。</p>
+<p>下一个驱动启用kmem设备文件(/dev/kmem virtual device support)。kmem通常用于内核调试。kmem可以用于读取某些内核变量和状态。</p>
+<p>Stallion卡上面有许多串口Stallion multiport serial support)。这个驱动特别支持这块卡。</p>
+<p>下面，我们可以进入到串行设备驱动了。如前所述，串行设备每次传输一位。</p>
+<p>第一个驱动用于标准串口支持(8250/16550 and compatible serial support)。</p>
+<p>在这个驱动下，即插即用(Plug-and-Play)同样存在于串口中(8250/16550 PNP device support)。</p>
+<p>下面的驱动允许串口用于连接一个终端后作为控制台(Console on 8250/16550 and compatible serial port)。</p>
+<p>一些UART控制器支持直接内存访问(DMA support for 16550 compatible UART controllers)。UART代表的是”Universal Asynchronous Receiver/Transmitter”(通用异步收发)。UART控制器转换串行到并行，反之亦然。</p>
+<p>下一步，这个驱动提供了标准PCI串行设备支持(8250/16550 PCI device support)。</p>
+<p>16位PCMCIA串行设备由这个驱动支持(8250/16550 PCMCIA device support)。记住，PCMCIA是一种通常使用于笔记本的PC卡。</p>
+<p>可以设置最大数量支持的串口(Maximum number of 8250/16550 serial ports)，接着是在启动中注册的最大数量(Number of 8250/16550 serial ports to register at runtime)。</p>
+<p>为了扩展像HUB6的串行能力，启用这个驱动(Extended 8250/16550 serial driver options)。</p>
+<p>一个特殊驱动用于支持多于4种的过时串口(Support more than 4 legacy serial ports)。</p>
+<p>当启用这个驱动后，可以共享串口中断(Support for sharing serial interrupts)。</p>
+<p>使用这个驱动可以自动检测串口中断请求(Autodetect IRQ on standard ports)。</p>
+<p>RSA串口同样也在Linux内核中支持(Support RSA serial ports)。RSA代表的是”Remote Supervisor Adapter”(远程管理适配器)。RSA是一种IBM特定的硬件。</p>
+<p>下面，有不同的供应商/设备特定驱动。</p>
+<p>下面有一个使用printk输出用户信息的TTY驱动(TTY driver to output user messages via printk)。printk(print kernel)是一种通常打印启动信息的特殊软件。任何由printk显示的字符串通常在/var/log/messages文件里。shell命令”dmesg”显示所有被printk使用的字符串。</p>
+<p>下面，我们可以启用/禁用并口打印机的支持(Parallel printer support)。</p>
+<p>接下来的驱动允许打印机作为一个控制台(Parallel printer support)。这意味着内核消息会被逐字地由打印机打印。通常地在这个系列中使用”print”(打印)这个单词时，意味这将输出信息到屏幕上。而这次，字面上的意思是将数据输出在纸上。</p>
+<p>以下的驱动使设备文件在/dev/parport/中(Support for user-space parallel port device drivers)。这使得一些进程可以访问。</p>
+<p>再说一次，Linux内核有许多特性和驱动，所以我们还会在下一篇文章中继续讨论更多的驱动。谢谢！</p>
+<p>致粉丝：我们正在接近配置过程的终点。我有一张你们很多人想知道的内核话题列表。这些话题包含了安装内核、管理模块、加入第三方驱动、还有许多其他有趣的建议和要求。</p>
+<hr>
+<p>via: <a href="http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-16.4835/" target="_blank" rel="external">http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-16.4835/</a></p>
+<p>译者：<a href="https://github.com/geekpi" target="_blank" rel="external">geekpi</a> 校对：<a href="https://github.com/wxy" target="_blank" rel="external">wxy</a></p>
+<p>本文由 <a href="https://github.com/LCTT/TranslateProject" target="_blank" rel="external">LCTT</a> 原创翻译，<a href="http://linux.cn/" target="_blank" rel="external">Linux中国</a> 荣誉推出</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-18 The Linux Kernel--Configuring the Kernel Part 14" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/02/18 The Linux Kernel--Configuring the Kernel Part 14/" class="article-date">
+  	<time datetime="2016-05-01T16:28:20.324Z" itemprop="datePublished">2016-05-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="戴文的Linux内核专题：18-配置内核-14"><a href="#戴文的Linux内核专题：18-配置内核-14" class="headerlink" title="戴文的Linux内核专题：18 配置内核 (14)"></a>戴文的Linux内核专题：18 配置内核 (14)</h1><p><img src="http://www.linux.org/attachments/slide-jpg.566/" alt=""></p>
+<p>你好！ 准备好读另一篇很酷的Linux内核文章了么?</p>
+<p>接下来，在这个任务中，我们可以启用/禁用”Fusion MPT logging facility”。MPT代表”Message Passing Technology”(消息传递技术)。Fusion驱动是由LSI Logic公司开发。MPT一种进程间使用的特定消息策略。这个技术是同步的意味着进程将会等待所需的消息。</p>
+<p>在这之后，如果计算机处理拥有火线端口就应该启用”FireWire driver stack”。如果没有，那么就没有必要去启动一个不会使用到的火线驱动。火线很像USB。不过在协议、速度、物理形状和端口布局上不同。通常上，苹果设备使用火线和USB。一些PC有火线端口，但是不像USB口那样普及。</p>
+<p>一些火线控制器使用OHCI-1394规范(OHCI-1394 controllers)。如果是这样，启用这个驱动。</p>
+<p>为了使用火线存储设备，启用下一个驱动(Storage devices (SBP-2 protocol))。这个驱动提供了火线存储单元与火线总线通信的协议(the card with the attached FireWire ports)。一些火线扫描仪同样需要这个驱动。</p>
+<p>IPv4可以用在火线端口(IP networking over 1394)。IEEE 1394或者简单的”1394”就是火线。使用IPv4在火线多播有局限。</p>
+<p>“Nosy”是”FireWire PCILynx”卡上的流量监控(Nosy - a FireWire traffic sniffer for PCILynx cards)。</p>
+<p>下一步，可以支持I2O设备(I2O device support)。”Intelligent Input/Output (I2O)”(智能输入/输出)总线使用硬件和操作系统层的驱动。硬件驱动(hardware drivers (HDM))并不特定与任何操作系统而OS驱动(OS drivers (OSM))必须在目标操作系统上使用。OSM可以与任何HDM通信。I2O卡/总线有一个IOP- 输入/输出处理器(Input/Output Processor)。由于主CPU处理更少的数据，所以加速了系统。</p>
+<p>只在缺乏SUN I2O控制器的系统上启用”Enable LCT notification”。I2C SUN固件不支持LCT通知。<br>如果目标是RAID，Adaptec I2O控制器需要下一个驱动(Enable Adaptec extensions)。</p>
+<p>64位的直接内存访问可以在Adaptec I2O控制器上启用(Enable 64-bit DMA)。</p>
+<p>如果允许，可以配置I2O设备(I2O Configuration support)。这个特性主要用在RAID设定中。</p>
+<p>可以为I2O启用支持老的输入/输出控制(Enable ioctls (OBSOLETE))。</p>
+<p>可以启用I2O总线适配器的OSM软件(I2O Bus Adapter OSM)。这组OSM被用来寻找新的在其他适配器末端的I2O设备。</p>
+<p>下面，可以启用I2O块设备上的OSM(I2O Block OSM)。I2O硬件上的RAID控制器需要这个OSM。</p>
+<p>下面的OSM用于I2O控制器上的SCSI或者光纤通道设备。</p>
+<p>如果启用了(I2O /proc support)，可以通过/proc读取I2O设备的信息。</p>
+<p>在启用/禁用了I2O特性，我们可以继续其他的内核特性。下面，我们看到”Macintosh device drivers”。这只对苹果设备有用。PC的Linux内核不应该有任何这些驱动启用。然而，正如许多说法都有例外一样。一些PC用户可能会使用苹果鼠标、键盘和/或者一些其他的苹果设备。再说一次，最好彻底地理解需求和正在开发的内核。</p>
+<p>下一步，我们有一个用于网络的驱动(Network device support)。X11和其他的Linux软件不依赖于这个驱动，所以如果内核不会连接到另一台计算机、因特网、内联网或者网络，那么这个特性可以安全地禁用。</p>
+<p>下面的驱动就像上面，但是特定于核心驱动(Network core driver support)。</p>
+<p>这个驱动支持Etherchannel(Bonding driver support)。”bonding”是两条或者更多的以太网通道的融合。这也成为中继。</p>
+<p>使用这个驱动(Dummy net driver support)，可以在Linux中设置一个虚拟网络。虚拟网络(dummy network)就像网络中的/dev/null。任何发送给虚拟网络的数据都会永久消失，因为它会发往/dev/null。IP地址没有设置。用户可以定义他们的网络相当于/dev/null。</p>
+<p>下一步，可以支持和EQL(EQL (serial line load balancing) support)。这允许两台计算机使用SLIP或者PPP协议在两条串行连接上通信。</p>
+<p>光纤通道是一种用于连接存储设备到计算机的快速串行协议(Fibre Channel driver support)。</p>
+<p>TMII收发器需要这个驱动(Generic Media Independent Interface device support)。MII是一种用于最高速度为100Mbit/s以太网的接口。以太网线缆用于连接到PHYceiver，这是一种以太网收发器。</p>
+<p>为了通过虚拟接口组织许多以太网设备，需要”Ethernet team driver support”。</p>
+<p>“MAC-VLAN support”允许用户在特定的MAC地址和某个接口上映射数据包。</p>
+<p>TAP字符设备可以由MAC-VLAN接口生成(MAC-VLAN based tap driver)。TAP设备从内核中获取数据包，这样它们就可以被送往其他地方。</p>
+<p>下一个特性允许虚拟vxvlan接口在3层网络上创建2层网络(Virtual eXtensible Local Area Network (VXLAN))。这通常用于隧道虚拟网络。</p>
+<p>内核发送给网络的消息可任意通过这个特性记录下来(Network console logging support)。除非记录网络信息对你很重要时才启用它。禁用这个特性会增强性能。</p>
+<p>这个特性允许不同参数被改变(Dynamic reconfiguration of logging targets)。这些参数包括端口号、MAC地址、IP地址和其他一些设定。</p>
+<p>如果用户空间程序希望使用TAP设备，那么启用这个特性可以允许这样的活动(Universal TUN/TAP device driver support)。</p>
+<p>这个驱动用于本地以太网隧道(Virtual ethernet pair device)。</p>
+<p>“Virtio network driver”用于QEMU、Xen、KVM和其他虚拟机。</p>
+<p>下一步，可以启用”ARCnet support”。ARCnet是一种类似令牌环本地局域网络(Local-Area-Network (LAN)协议。ARCnet代表”Attached Resource Computer Network”(附加资源计算器网络)。</p>
+<p>现在，我们进入到”ATM drivers”。ATM代表”Asynchronous Transfer Mode”(异步传输模式)。ATM用于电信。</p>
+<p>Marevell以太网交换机芯片需要这个驱动(Marvell 88E6060 ethernet switch chip support)。同样，这类交换机的芯片同样需要依赖模型(Marvell 88E6085/6095/6095F/6131 ethernet switch chip support)和(Marvell 88E6123/6161/6165 ethernet switch chip support)。</p>
+<p>现在，我们可以学习关于”Ethernet driver support”。</p>
+<p>首先我们可以启用/禁用”3Com devices”。接下来允许内核开发者选择支持哪些3Com设备。</p>
+<p>下一组选项是对于不同的”Adaptec devices”和接下来的”Alteon devices”。</p>
+<p>这些只是特定设备/供应商驱动。通常地，这些驱动被作为模块加入。</p>
+<p>在设置了这两组选项后，接下来还有”AMD devices”和”Atheros devices”。</p>
+<p>注意：请记住内核会运行在哪类硬件上。对于大量不同的设备，或许最好把它们作为模块加入</p>
+<p>这里有不同特定供货商的设备驱动-“Cadence devices”、”Broadcom devices”、”Brocade devices”、”Chelsio devices”、”Cisco devices”、”Digital Equipment devices”。一些其他的特定设备/供应商驱动遵循它们。</p>
+<p>接下来的驱动并不是特定设备/供应商的 “SLIP (serial line) support”。这个驱动支持SLIP和CSLIP。SLIP(Serial Line Internet Protocol)是一种用于调制解调器和串口的因特网驱动。PPP现在用来代替SLIP。CSLIP是压缩的SLIP。</p>
+<p>下面，”CSLIP compressed headers”可以启用用来压缩TCP/IP头。CSLIP快于SLIP，但是想要启用CSLIP，传输和接收的计算机都必须理解CSLIP。</p>
+<p>当在恶劣的模拟线路上使用SLIP时，最好启用”Keepalive and linefill”，这会帮助保持连接。</p>
+<p>对于质量差的网络或者7bit网络中运行IP而言，最好启用”Six bit SLIP encapsulation”。</p>
+<p>现在我们可以进入流行的USB系统，但是这些是用于网络的USB驱动。</p>
+<p>第一个启用/禁用的USB网络设备是”USB CATC NetMate-based Ethernet device support”。这是用于10Mbps的USB以太网EL1210A芯片设备。USB设备将会扮演和成为一个以太网设备即使硬件是USB。</p>
+<p>接下来，除了设备是KLSI KL5KUSB101B芯片组(USB KLSI KL5USB101-based ethernet device support)，其他与上面的驱动一样。</p>
+<p>Pegasus USB是USB转以太网的适配器/转换器(USB Pegasus/Pegasus-II based ethernet device support)。</p>
+<p>接下来是另外一个USB转以太网驱动(USB RTL8150 based ethernet device support)。</p>
+<p>下一篇文章中，我们将继续配置USB网络系统。</p>
+<hr>
+<p>via: <a href="http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-14.4765/" target="_blank" rel="external">http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-14.4765/</a></p>
+<p>译者：<a href="https://github.com/geekpi" target="_blank" rel="external">geekpi</a> 校对：<a href="https://github.com/wxy" target="_blank" rel="external">wxy</a></p>
+<p>本文由 <a href="https://github.com/LCTT/TranslateProject" target="_blank" rel="external">LCTT</a> 原创翻译，<a href="http://linux.cn/" target="_blank" rel="external">Linux中国</a> 荣誉推出</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-17 The Linux Kernel--Configuring the Kernel Part 13" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/02/17 The Linux Kernel--Configuring the Kernel Part 13/" class="article-date">
+  	<time datetime="2016-05-01T16:28:20.321Z" itemprop="datePublished">2016-05-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="戴文的Linux内核专题：17-配置内核-13"><a href="#戴文的Linux内核专题：17-配置内核-13" class="headerlink" title="戴文的Linux内核专题：17 配置内核 (13)"></a>戴文的Linux内核专题：17 配置内核 (13)</h1><p><img src="http://www.linux.org/attachments/slide-jpg.555/" alt=""></p>
+<p>你好!这是Linux内核系列的下一篇，我们仍将配置ATA设备并将进入逻辑卷/存储。</p>
+<p>“ATA SFF support (for legacy IDE and PATA)”应该启用，因为这扩展了ATA的能力。</p>
+<p>为了支持Pacific Digital的ADMA控制器，应该启用”Pacific Digital ADMA support”。</p>
+<p>“Pacific Digital Serial ATA QStor support”(串口ATA支持)在下一个驱动中支持</p>
+<p>Promise的SATA SX4设备在内核中支持(Promise SATA SX4 support (Experimental))。</p>
+<p>可以BMDMA的SFF ATA控制器需要这个驱动(ATA BMDMA support)。BMDMA代表总线主控直接内存访问(BMDMA stands for Bus-Master Direct Memory Access)。</p>
+<p>下面，这个驱动对不同的SATA和PATA控制器提供支持Intel ESB, ICH, PIIX3, PIIX4 PATA/SATA support)。</p>
+<p>这里有其他的特定设备驱动(Calxeda Highbank SATA support)、(Marvell SATA support)、(NVIDIA SATA support)、(Promise SATA TX2/TX4 support)、(Silicon Image SATA support)还有(SiS 964/965/966/180 SATA support)、(ServerWorks Frodo / Apple K2 SATA support)、(ULi Electronics SATA support)、(VIA SATA support)。。。由于有很多SATA/PATA控制器设计不同，一个通用驱动无法使用在这些设备上。</p>
+<p>接下来，这个驱动支持PC卡上的ATA设备除非有特定设备管理硬件的驱动(PCMCIA PATA support)。</p>
+<p>在这之后，有一个通用PATA驱动用于管理其他不被先前驱动支持的PATA设备 (Generic platform device PATA support)。</p>
+<p>PATA设备的电源消耗由这个ACPI驱动管理(ACPI firmware driver for PATA)。强烈建议对系统上所有的硬件启用ACPI。虽然这会增加内核的大小，但是ACPI会增强性能。</p>
+<p>“Generic ATA support”(通用ATA支持)由这个驱动提供。</p>
+<p>古老的ISA、VLB和PCI总线PATA设备可以通过这个驱动支持(Legacy ISA PATA support (Experimental))。这个古老支持使用新的ATA层。</p>
+<p>这组特性包含了许多对于RAID和LVM能力，可见下面的特性选项(Multiple devices driver support (RAID and LVM))。</p>
+<p>有趣的事实：内核是由C和汇编写成的。</p>
+<p>这个驱动允许RAID和LVM组合在一起。这用于使几个LVM卷使用RAID。分区被组合成逻辑块设备，然后形成RAID设备。</p>
+<p>许多用户会希望RAID可以在启动时侦测到(Autodetect RAID arrays during kernel boot)。如果你没有RAID，那么不要启用这个特性。不然，启动处理会比原先希望的慢上几秒。</p>
+<p>注意：当配置Linux内核时，最好按照”use it or lose it”(非用即失)的原则。那就是，如果你不用它，那就禁用这个特性。</p>
+<p>硬盘分区可以通过这个驱动加在一起(Linear (append) mode)。</p>
+<p>下面的驱动加入RAID-0支持带逻辑块设备中(RAID-0 (striping) mode)。接着还有 (RAID-1 (mirroring) mode)、(RAID-10 (mirrored striping) mode)和(RAID-4/RAID-5/RAID-6 mode)。</p>
+<p>MD框架需要多路径支持(Multipath I/O support)。MD框架就是多设备(Multi Device)框架,它将多台设备作为一个单元管理。举例来说，将许多存储单元的分区组合起来可以使多个设备就像一个那样。多路径支持是用于使用处理虚拟的有多个地址的”单个设备”。因为单存储单元物理上有多件物理设备，所以它有多个硬件地址。</p>
+<p>使用这个调试驱动，可以测试更大的多磁盘存储单元的bug(Faulty test module for MD)。</p>
+<p>“Device mapper support”是一个用来映射逻辑扇区的卷管理器。LVM使用扇区映射。</p>
+<p>如果启用的话，设备映射器可以有调试特性(Device mapper debugging support)。</p>
+<p>如果需要，逻辑设备可以设置加密数据(Crypt target support)。这个特性允许用户将来加密那些存储设备。</p>
+<p>只有启用了这个特性，才能使用逻辑存储单元的快照功能(Snapshot target)。</p>
+<p>“Thin provisioning”(自动精简配置)允许逻辑卷设置成比组成逻辑卷的物理设备拥有更大的存储容量(Thin provisioning target)。这个特性同样为这类设备提供了快照功能。这额外的虚拟数据空间无法马上使用。这个特性的意义是允许用户在将来增加物理存储单元并且节约了配置逻辑块设备的时间。</p>
+<p>用这个可以调试”Thin provisioning” (Keep stack trace of thin provisioning block lock holders)。</p>
+<p>块设备性能的提升可以通过移动更多的常用数据到更快的存储单元中(Cache target (EXPERIMENTAL))。</p>
+<p>卷管理器可以制成镜像逻辑卷(Mirror target)。</p>
+<p>设备映射器(Device-mapper (dm))单元支持映射RAID1、RAID10、 RAID4、RAID5和RAID6(RAID 1/4/5/6/10 target)。</p>
+<p>设备映射器(device-mapper)日志可以镜像到用户空间(Mirror userspace logging)。</p>
+<p>“Zero target”是一个忽视写入并返回读取为零的设备。</p>
+<p>接下来，卷管理器应该对硬件有多路径支持(Multipath target)。</p>
+<p>这个驱动会发现最有效的到存储设备的路径来读取和写入(I/O Path Selector based on the number of in-flight I/Os)。</p>
+<p>下面的一个驱动和以上相同，但是会寻找最快路径(I/O Path Selector based on the service time)。</p>
+<p>如果一个逻辑卷上的物理存储单元正忙，如果可能的话，这个特性会允许读取/写入到另一个物理卷上。</p>
+<p>udev可以生成设备管理器操作事件DM uevents)。udev是/dev的设备管理器。</p>
+<p>为了测试软件/硬件对偶尔失败的输入/输出任务的逻辑设备如何反映，启用这个调试特性(Flakey target)。</p>
+<p>逻辑卷可以创建为一个用于验证另一个逻辑分区数据的只读存储单元(Verity target support)。</p>
+<p>注意：如果你喜欢我的文章，并且如果你有Linux.org的账号，请在我的文章上点击”Like”。同样，再次分享这篇文章在Google、Twitter和/或者Facebook上。</p>
+<p>ConfigFS和TCM存储引擎可以通过这个设置启用(Generic Target Core Mod (TCM) and ConfigFS Infrastructure)。ConfigFS是一个基于内存的文件系统。</p>
+<p>有趣的事实：Linux内核没有”main()”函数。在程序中，main()被依赖于kernel的libc调用。内核没有main()函数是因为libc将无法启动内核。如果内核的确有main()函数，那么我们就有一个”鸡或者蛋”的问题-谁先来？另外，内核的入口点用汇编写成，这并不使用main()函数。</p>
+<p>下面，”TCM/IBLOCK Subsystem Plugin for Linux/BLOCK”可以禁用或者启用。</p>
+<p>接着”TCM/FILEIO Subsystem Plugin for Linux/VFS”可以启用/禁用。</p>
+<p>再次，还有两个TCM特性 - (TCM/pSCSI Subsystem Plugin for Linux/SCSI) 和 (TCM Virtual SAS target and Linux/SCSI LDD fabric loopback module)</p>
+<p>对于ConfigFS的”Linux-iSCSI.org iSCSI Target Mode Stack”在这个驱动中支持(Linux-iSCSI.org iSCSI Target Mode Stack)。</p>
+<p>下一步，可以启用/禁用”FireWire SBP-2 fabric module”。这允许一台计算机作为一个硬盘连接到另一台计算机上。</p>
+<p>在这之后，我们可以配置”Fusion Message Passing Technology (MPT) device support”。</p>
+<p>在那个标题下的第一个选项是一个用于并口适配器的SCSI支持的驱动(Fusion MPT ScsiHost drivers for SPI)。</p>
+<p>SCSI同样也可以支持光纤通道主机适配器(Fusion MPT ScsiHost drivers for FC)和/或SAS适配器(Fusion MPT ScsiHost drivers for SAS)。</p>
+<p>下一步，用户可以设置”Maximum number of scatter gather entries”。一个低的数值可以减少每个控制器实例的内存消耗。</p>
+<p>下一个驱动提供了ioctl系统调用来管理MPT适配器(Fusion MPT misc device (ioctl) driver)。</p>
+<p>光纤通道端口可以用这个驱动支持IP LAN的流量(Fusion MPT LAN driver)。</p>
+<p>我可以读到你们的想法-你们会想到对于这个还有另外一篇文章。是的，你们想对了。请继续关注这个系列的下一篇文章。</p>
+<p>如果你喜欢这个系列，请在Linux.org和/或者Google+上发表评论告诉我你有多喜欢这个系列，并且告诉我你想在今后的文章中希望看到的方面。或者给我发邮件DevynCJohnson@Gmail.com)。谢谢！</p>
+<p>想要更多地了解作者，请检查下面的签名栏中的链接(译注：原文所在论坛有)</p>
+<p>如果你已经完整地阅读了这篇文章，那么你应该已经看到单词”Facebook”三次了。如果没有，你没有阅读全部文章。</p>
+<p>单词”Facebook”在这段中，上一段，和一个注解中。我打赌你阅读了上面的段落而没有通读文章来试图寻找第三个单词实例。</p>
+<hr>
+<p>via: <a href="http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-13.4714/" target="_blank" rel="external">http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-13.4714/</a></p>
+<p>译者：<a href="https://github.com/geekpi" target="_blank" rel="external">geekpi</a> 校对：<a href="https://github.com/wxy" target="_blank" rel="external">wxy</a></p>
+<p>本文由 <a href="https://github.com/LCTT/TranslateProject" target="_blank" rel="external">LCTT</a> 原创翻译，<a href="http://linux.cn/" target="_blank" rel="external">Linux中国</a> 荣誉推出</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 </div>
       <footer id="footer">

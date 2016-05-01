@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="戴文的Linux内核专题：22 配置内核 (18)
+你好！准备好阅读下一篇文章了么？在本篇中，我们将会讨论辅助显示。辅助显示是一些小的LCD屏幕；大多数小于或等于128x64。接着，我们会讨论用户空间IO驱动，一些虚拟驱动，Hyper-V，开发中驱动，IOMMU，和其他一些内核特性。
+第一个配置辅助显示的驱动是”KS0108 LCD Controller”。KS0108 LCD Controlle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://www.zky001.cn/2016/05/02/22 The Linux Kernel--Configuring the Kernel Part 18/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="戴文的Linux内核专题：22 配置内核 (18)
+你好！准备好阅读下一篇文章了么？在本篇中，我们将会讨论辅助显示。辅助显示是一些小的LCD屏幕；大多数小于或等于128x64。接着，我们会讨论用户空间IO驱动，一些虚拟驱动，Hyper-V，开发中驱动，IOMMU，和其他一些内核特性。
+第一个配置辅助显示的驱动是”KS0108 LCD Controller”。KS0108 LCD Controlle">
+<meta property="og:image" content="http://www.linux.org/attachments/slide-jpg.616/">
+<meta property="og:image" content="http://www.linux.org/attachments/kernel_18-png.617/">
+<meta property="og:updated_time" content="2015-12-01T03:16:33.961Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="戴文的Linux内核专题：22 配置内核 (18)
+你好！准备好阅读下一篇文章了么？在本篇中，我们将会讨论辅助显示。辅助显示是一些小的LCD屏幕；大多数小于或等于128x64。接着，我们会讨论用户空间IO驱动，一些虚拟驱动，Hyper-V，开发中驱动，IOMMU，和其他一些内核特性。
+第一个配置辅助显示的驱动是”KS0108 LCD Controller”。KS0108 LCD Controlle">
+<meta name="twitter:image" content="http://www.linux.org/attachments/slide-jpg.616/">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://avatars0.githubusercontent.com/u/16217370?v=3&amp;u=2144c8c49f4133187993121c83f24b1b35aebbd3&amp;s=140" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Markgolzh</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>Tags</li>
+						
+						<li>Links</li>
+						
+						
+						<li>Über</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/zky001" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/kaiyuan-zhnag" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/1134386961@qq.com" title="mail">mail</a>
+					        
+								<a class="facebook" target="_blank" href="https://www.facebook.com/profile.php?id=100006625267946" title="facebook">facebook</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Markgolzh</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="https://avatars0.githubusercontent.com/u/16217370?v=3&amp;u=2144c8c49f4133187993121c83f24b1b35aebbd3&amp;s=140" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Markgolzh</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/zky001" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/kaiyuan-zhnag" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/1134386961@qq.com" title="mail">mail</a>
+			        
+						<a class="facebook" target="_blank" href="https://www.facebook.com/profile.php?id=100006625267946" title="facebook">facebook</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-22 The Linux Kernel--Configuring the Kernel Part 18" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/02/22 The Linux Kernel--Configuring the Kernel Part 18/" class="article-date">
+  	<time datetime="2016-05-01T16:28:20.334Z" itemprop="datePublished">2016-05-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="戴文的Linux内核专题：22-配置内核-18"><a href="#戴文的Linux内核专题：22-配置内核-18" class="headerlink" title="戴文的Linux内核专题：22 配置内核 (18)"></a>戴文的Linux内核专题：22 配置内核 (18)</h1><p><img src="http://www.linux.org/attachments/slide-jpg.616/" alt=""></p>
+<p>你好！准备好阅读下一篇文章了么？在本篇中，我们将会讨论辅助显示。辅助显示是一些小的LCD屏幕；大多数小于或等于128x64。接着，我们会讨论用户空间IO驱动，一些虚拟驱动，Hyper-V，开发中驱动，IOMMU，和其他一些内核特性。</p>
+<p>第一个配置辅助显示的驱动是”KS0108 LCD Controller”。KS0108 LCD Controller是由三星制造的图形控制器。</p>
+<p>下面可以设置LCD并口地址(Parallel port where the LCD is connected)。第一个并口地址是0x378，下一个是0x278，第三个是0x3BC。这些不是地址唯一的选择。大多数人不需要改变这个。shell命令”cat /proc/ioports”会列出可用的并口和地址。</p>
+<p>内核可以设置KS0108 LCD 控制器的写入延时到并口(Delay between each control writing (microseconds))。默认的值大部分是正确的，因此一般不需要更改。</p>
+<p>“CFAG12864B LCD”屏幕是一块128x64，双色LCD屏幕。这块屏幕依赖于KS0108 LCD控制器。</p>
+<p>可以改变这些LCD屏幕的刷新率(Refresh rate (hertz))。通常上，更高的刷新率会导致更多的CPU活动。这意味着一个缓慢的系统需要一个更低的刷新率。</p>
+<p>设置完辅助显示后，接着设置”Userspace I/O drivers”。用户空间系统允许用户的应用和进程访问内核中断和内存地址。启用了它，一些驱动可以放在用户空间。</p>
+<p>“generic Hilscher CIF Card driver”用于Profibus卡和Hilscher CIF卡。</p>
+<p>“Userspace I/O platform driver”在用户空间创建通用驱动系统。</p>
+<p>下一个驱动和上面的相同，但是增加IRQ处理(Userspace I/O platform driver with generic IRQ handling)。</p>
+<p>下面的驱动又像前面的一个，但是增加了动态内存支持(Userspace platform driver with generic irq and dynamic memory)。</p>
+<p>下面，是一些供应商/设备特性的驱动。</p>
+<p>接着是一些通用PCI/PCIe卡驱动(Generic driver for PCI 2.3 and PCI Express cards)。</p>
+<p>下面的驱动用于”VFIO support for PCI devices”。VFIO代表Virtual Function Input/Output(虚拟功能输入/输出)。VFIO允许设备直接以安全方式访问用户空间。</p>
+<p>“VFIO PCI support for VGA devices”允许VGA通过VFIO被PCI支持。</p>
+<p>接下来是virtio驱动。virtio是一个IO虚拟化平台。这个虚拟软件用于操作系统虚拟化。这在Linux系统上的虚拟机上运行一个操作系统时需要。</p>
+<p>我们第一个可以配置的virtio驱动是”PCI driver for virtio devices”。这允许虚拟访问PCI</p>
+<p>“Virtio balloon driver”允许虚拟系统的内存根据需要扩展或减少。通常上，没有人希望在需要内存的时候，虚拟系统保留它可能不会使用的内存。</p>
+<p>下面的驱动允许内存映射到virtio设备(Platform bus driver for memory mapped virtio devices)。</p>
+<p>如果Linux内核需要运行在微软的Hyper-V系统上，那么启用这个驱动(Microsoft Hyper-V client drivers)。这允许Linux能够成为Hyper的访客/客户端系统。</p>
+<p><img src="http://www.linux.org/attachments/kernel_18-png.617/" alt=""></p>
+<p>下面，我们会配置处于开发阶段的驱动。这些驱动正在开发当中，可能会变化很快，或者还没到Linux内核的质量标准。这个分类中的驱动只有Android驱动(在内核3.9.4中)。是的，Andorid使用Linux内核，这使得Andorid变成了一个Linux系统。然而，这仍然有争议。如果内核是用于Android，那么最好启用所有的驱动。</p>
+<p>“Android Binder IPC Driver”提供了对于Binder的支持，它允许Andorid系统进程间相互通信。</p>
+<p>下面可以启用ashmen驱动(Enable the Anonymous Shared Memory Subsystem)。Ashmem代表”Anonymous SHared MEMory”(虚拟内存共享)或者”Android SHared MEMory”(Andorid共享内存)。</p>
+<p>“Android log driver”提供了完整的Andorid日志系统。</p>
+<p>“Timed output class driver” 和 “Android timed gpio driver”允许Andorid系统操作GIP引脚并在超时后取消操作。</p>
+<p>“Android Low Memory Killer”会在需要更多内存关闭进程。这个特性会杀死不再使用或活跃的任务。</p>
+<p>“Android alarm driver”使内核在设定的间隔后唤醒。</p>
+<p>在配置完开发阶段的驱动后，下面的驱动用于X86平台。这些驱动是 X86 (32-bit)的供应商/设备特定硬件。</p>
+<p>下一个驱动是”Mailbox Hardware Support”。这个框架控制邮箱队列和硬件邮箱系统的中断信号。</p>
+<p>“IOMMU Hardware Support”链接内存到能够使用DMA的设备上。IOMMU增强了DMA。IOMMU映射地址并阻止故障设备访问内存。IOMMU同样允许硬件访问比没有IOMMU更多内存。</p>
+<p>“AMD IOMMU support”提供了对AMD设备更好的IOMMU支持。</p>
+<p>对于AMD IOMMU支持存在调试特性(Export AMD IOMMU statistics to debugfs)。</p>
+<p>存在一个对于AMD硬件的更新版本的IOMMU驱动(AMD IOMMU Version 2 driver)。</p>
+<p>Linux内核同样支持对Intel设备的IOMMU驱动支持(Support for Intel IOMMU using DMA Remapping Devices)。</p>
+<p>一些设备可能会接受不同的电压和时钟频率。这个驱动允许操作系统控制设备的电压输出和时钟频率(Generic Dynamic Voltage and Frequency Scaling (DVFS) support)。启用了这个驱动，可以启用下面的那些对于电源/性能管理特性。</p>
+<p>“Simple Ondemand”就像上面的，但是只会基于设备活动改变时钟频率。通常上，更多的活动意味着设备需要更快的时钟速率来使用更多的资源需求。</p>
+<p>“Performance”允许系统设置最高支持的时钟速度以满足最好的性能。这会增加电源消耗。</p>
+<p>“Powersave”会设置时钟频率到最低以节约电源。</p>
+<p>“Userspace”允许用户空间设置时钟频率。</p>
+<p>“External Connector Class (extcon) support”使得用户空间可以监视外部连接器如USB和AC口。这允许应用了解是否插入了线缆。用户几乎都希望启用这个。如果任何人由于某个合理的理由禁用了它，请告诉我们为什么这么做。</p>
+<p>“GPIO extcon support”驱动就像上面的驱动，但是它只对于GPIO管脚。</p>
+<p>接下来是不同的供货商/设备特定的内存控制器(Memory Controller drivers)。内存芯片控制器可能是独立的设备或者内置在内存芯片上。这些控制器管理这输入和输出的数据流。</p>
+<p>“Industrial I/O support”驱动提供了标准的传感器接口而不管总线的类型(像PCIe、spi、GPIO等等)。IIO是”Industrial I/O support”(工业IO)的通用缩写。</p>
+<p>Linux内核提供了大量不同的加速器、放大器模数转换器、惯性测量单元、光敏传感器、磁场传感器和其他许多传感器和转换器的支持。</p>
+<p>“Intel Non-Transparent Bridge support”驱动支持连接到系统的PCIe硬件桥。所有到映射内存的写入会镜像到两个系统中。</p>
+<p>“VME bridge support”和上面的相同除了桥使用的是VME，这是一个不同的总线标准。</p>
+<p>“Pulse-Width Modulation (PWM) Support”通过调节从这些设备收到的平均功率调节背光灯和风扇速度。</p>
+<p>“IndustryPack bus support”提供了对IndustryPack总线标准的支持。</p>
+<p>下一篇文章，我们会继续配置固件驱动。谢谢!</p>
+<hr>
+<p>via: <a href="http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-18.4896/" target="_blank" rel="external">http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-18.4896/</a></p>
+<p>译者：<a href="https://github.com/geekpi" target="_blank" rel="external">geekpi</a> 校对：<a href="https://github.com/wxy" target="_blank" rel="external">wxy</a></p>
+<p>本文由 <a href="https://github.com/LCTT/TranslateProject" target="_blank" rel="external">LCTT</a> 原创翻译，<a href="http://linux.cn/" target="_blank" rel="external">Linux中国</a> 荣誉推出</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/05/02/23 The Linux Kernel--Configuring the Kernel Part 19/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/05/02/20 The Linux Kernel--Configuring the Kernel Part 16/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="22 The Linux Kernel--Configuring the Kernel Part 18" data-title="" data-url="http://www.zky001.cn/2016/05/02/22 The Linux Kernel--Configuring the Kernel Part 18/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Markgolzh
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

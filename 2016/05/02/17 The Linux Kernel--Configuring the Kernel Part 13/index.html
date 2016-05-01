@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="戴文的Linux内核专题：17 配置内核 (13)
+你好!这是Linux内核系列的下一篇，我们仍将配置ATA设备并将进入逻辑卷/存储。
+“ATA SFF support (for legacy IDE and PATA)”应该启用，因为这扩展了ATA的能力。
+为了支持Pacific Digital的ADMA控制器，应该启用”Pacific Digital ADMA support”。
+“Pacif">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://www.zky001.cn/2016/05/02/17 The Linux Kernel--Configuring the Kernel Part 13/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="戴文的Linux内核专题：17 配置内核 (13)
+你好!这是Linux内核系列的下一篇，我们仍将配置ATA设备并将进入逻辑卷/存储。
+“ATA SFF support (for legacy IDE and PATA)”应该启用，因为这扩展了ATA的能力。
+为了支持Pacific Digital的ADMA控制器，应该启用”Pacific Digital ADMA support”。
+“Pacif">
+<meta property="og:image" content="http://www.linux.org/attachments/slide-jpg.555/">
+<meta property="og:updated_time" content="2015-12-01T03:16:33.956Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="戴文的Linux内核专题：17 配置内核 (13)
+你好!这是Linux内核系列的下一篇，我们仍将配置ATA设备并将进入逻辑卷/存储。
+“ATA SFF support (for legacy IDE and PATA)”应该启用，因为这扩展了ATA的能力。
+为了支持Pacific Digital的ADMA控制器，应该启用”Pacific Digital ADMA support”。
+“Pacif">
+<meta name="twitter:image" content="http://www.linux.org/attachments/slide-jpg.555/">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://avatars0.githubusercontent.com/u/16217370?v=3&amp;u=2144c8c49f4133187993121c83f24b1b35aebbd3&amp;s=140" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Markgolzh</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>Tags</li>
+						
+						<li>Links</li>
+						
+						
+						<li>Über</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/zky001" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/kaiyuan-zhnag" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/1134386961@qq.com" title="mail">mail</a>
+					        
+								<a class="facebook" target="_blank" href="https://www.facebook.com/profile.php?id=100006625267946" title="facebook">facebook</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Markgolzh</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="https://avatars0.githubusercontent.com/u/16217370?v=3&amp;u=2144c8c49f4133187993121c83f24b1b35aebbd3&amp;s=140" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Markgolzh</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/zky001" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/kaiyuan-zhnag" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/1134386961@qq.com" title="mail">mail</a>
+			        
+						<a class="facebook" target="_blank" href="https://www.facebook.com/profile.php?id=100006625267946" title="facebook">facebook</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-17 The Linux Kernel--Configuring the Kernel Part 13" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/02/17 The Linux Kernel--Configuring the Kernel Part 13/" class="article-date">
+  	<time datetime="2016-05-01T16:28:20.321Z" itemprop="datePublished">2016-05-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="戴文的Linux内核专题：17-配置内核-13"><a href="#戴文的Linux内核专题：17-配置内核-13" class="headerlink" title="戴文的Linux内核专题：17 配置内核 (13)"></a>戴文的Linux内核专题：17 配置内核 (13)</h1><p><img src="http://www.linux.org/attachments/slide-jpg.555/" alt=""></p>
+<p>你好!这是Linux内核系列的下一篇，我们仍将配置ATA设备并将进入逻辑卷/存储。</p>
+<p>“ATA SFF support (for legacy IDE and PATA)”应该启用，因为这扩展了ATA的能力。</p>
+<p>为了支持Pacific Digital的ADMA控制器，应该启用”Pacific Digital ADMA support”。</p>
+<p>“Pacific Digital Serial ATA QStor support”(串口ATA支持)在下一个驱动中支持</p>
+<p>Promise的SATA SX4设备在内核中支持(Promise SATA SX4 support (Experimental))。</p>
+<p>可以BMDMA的SFF ATA控制器需要这个驱动(ATA BMDMA support)。BMDMA代表总线主控直接内存访问(BMDMA stands for Bus-Master Direct Memory Access)。</p>
+<p>下面，这个驱动对不同的SATA和PATA控制器提供支持Intel ESB, ICH, PIIX3, PIIX4 PATA/SATA support)。</p>
+<p>这里有其他的特定设备驱动(Calxeda Highbank SATA support)、(Marvell SATA support)、(NVIDIA SATA support)、(Promise SATA TX2/TX4 support)、(Silicon Image SATA support)还有(SiS 964/965/966/180 SATA support)、(ServerWorks Frodo / Apple K2 SATA support)、(ULi Electronics SATA support)、(VIA SATA support)。。。由于有很多SATA/PATA控制器设计不同，一个通用驱动无法使用在这些设备上。</p>
+<p>接下来，这个驱动支持PC卡上的ATA设备除非有特定设备管理硬件的驱动(PCMCIA PATA support)。</p>
+<p>在这之后，有一个通用PATA驱动用于管理其他不被先前驱动支持的PATA设备 (Generic platform device PATA support)。</p>
+<p>PATA设备的电源消耗由这个ACPI驱动管理(ACPI firmware driver for PATA)。强烈建议对系统上所有的硬件启用ACPI。虽然这会增加内核的大小，但是ACPI会增强性能。</p>
+<p>“Generic ATA support”(通用ATA支持)由这个驱动提供。</p>
+<p>古老的ISA、VLB和PCI总线PATA设备可以通过这个驱动支持(Legacy ISA PATA support (Experimental))。这个古老支持使用新的ATA层。</p>
+<p>这组特性包含了许多对于RAID和LVM能力，可见下面的特性选项(Multiple devices driver support (RAID and LVM))。</p>
+<p>有趣的事实：内核是由C和汇编写成的。</p>
+<p>这个驱动允许RAID和LVM组合在一起。这用于使几个LVM卷使用RAID。分区被组合成逻辑块设备，然后形成RAID设备。</p>
+<p>许多用户会希望RAID可以在启动时侦测到(Autodetect RAID arrays during kernel boot)。如果你没有RAID，那么不要启用这个特性。不然，启动处理会比原先希望的慢上几秒。</p>
+<p>注意：当配置Linux内核时，最好按照”use it or lose it”(非用即失)的原则。那就是，如果你不用它，那就禁用这个特性。</p>
+<p>硬盘分区可以通过这个驱动加在一起(Linear (append) mode)。</p>
+<p>下面的驱动加入RAID-0支持带逻辑块设备中(RAID-0 (striping) mode)。接着还有 (RAID-1 (mirroring) mode)、(RAID-10 (mirrored striping) mode)和(RAID-4/RAID-5/RAID-6 mode)。</p>
+<p>MD框架需要多路径支持(Multipath I/O support)。MD框架就是多设备(Multi Device)框架,它将多台设备作为一个单元管理。举例来说，将许多存储单元的分区组合起来可以使多个设备就像一个那样。多路径支持是用于使用处理虚拟的有多个地址的”单个设备”。因为单存储单元物理上有多件物理设备，所以它有多个硬件地址。</p>
+<p>使用这个调试驱动，可以测试更大的多磁盘存储单元的bug(Faulty test module for MD)。</p>
+<p>“Device mapper support”是一个用来映射逻辑扇区的卷管理器。LVM使用扇区映射。</p>
+<p>如果启用的话，设备映射器可以有调试特性(Device mapper debugging support)。</p>
+<p>如果需要，逻辑设备可以设置加密数据(Crypt target support)。这个特性允许用户将来加密那些存储设备。</p>
+<p>只有启用了这个特性，才能使用逻辑存储单元的快照功能(Snapshot target)。</p>
+<p>“Thin provisioning”(自动精简配置)允许逻辑卷设置成比组成逻辑卷的物理设备拥有更大的存储容量(Thin provisioning target)。这个特性同样为这类设备提供了快照功能。这额外的虚拟数据空间无法马上使用。这个特性的意义是允许用户在将来增加物理存储单元并且节约了配置逻辑块设备的时间。</p>
+<p>用这个可以调试”Thin provisioning” (Keep stack trace of thin provisioning block lock holders)。</p>
+<p>块设备性能的提升可以通过移动更多的常用数据到更快的存储单元中(Cache target (EXPERIMENTAL))。</p>
+<p>卷管理器可以制成镜像逻辑卷(Mirror target)。</p>
+<p>设备映射器(Device-mapper (dm))单元支持映射RAID1、RAID10、 RAID4、RAID5和RAID6(RAID 1/4/5/6/10 target)。</p>
+<p>设备映射器(device-mapper)日志可以镜像到用户空间(Mirror userspace logging)。</p>
+<p>“Zero target”是一个忽视写入并返回读取为零的设备。</p>
+<p>接下来，卷管理器应该对硬件有多路径支持(Multipath target)。</p>
+<p>这个驱动会发现最有效的到存储设备的路径来读取和写入(I/O Path Selector based on the number of in-flight I/Os)。</p>
+<p>下面的一个驱动和以上相同，但是会寻找最快路径(I/O Path Selector based on the service time)。</p>
+<p>如果一个逻辑卷上的物理存储单元正忙，如果可能的话，这个特性会允许读取/写入到另一个物理卷上。</p>
+<p>udev可以生成设备管理器操作事件DM uevents)。udev是/dev的设备管理器。</p>
+<p>为了测试软件/硬件对偶尔失败的输入/输出任务的逻辑设备如何反映，启用这个调试特性(Flakey target)。</p>
+<p>逻辑卷可以创建为一个用于验证另一个逻辑分区数据的只读存储单元(Verity target support)。</p>
+<p>注意：如果你喜欢我的文章，并且如果你有Linux.org的账号，请在我的文章上点击”Like”。同样，再次分享这篇文章在Google、Twitter和/或者Facebook上。</p>
+<p>ConfigFS和TCM存储引擎可以通过这个设置启用(Generic Target Core Mod (TCM) and ConfigFS Infrastructure)。ConfigFS是一个基于内存的文件系统。</p>
+<p>有趣的事实：Linux内核没有”main()”函数。在程序中，main()被依赖于kernel的libc调用。内核没有main()函数是因为libc将无法启动内核。如果内核的确有main()函数，那么我们就有一个”鸡或者蛋”的问题-谁先来？另外，内核的入口点用汇编写成，这并不使用main()函数。</p>
+<p>下面，”TCM/IBLOCK Subsystem Plugin for Linux/BLOCK”可以禁用或者启用。</p>
+<p>接着”TCM/FILEIO Subsystem Plugin for Linux/VFS”可以启用/禁用。</p>
+<p>再次，还有两个TCM特性 - (TCM/pSCSI Subsystem Plugin for Linux/SCSI) 和 (TCM Virtual SAS target and Linux/SCSI LDD fabric loopback module)</p>
+<p>对于ConfigFS的”Linux-iSCSI.org iSCSI Target Mode Stack”在这个驱动中支持(Linux-iSCSI.org iSCSI Target Mode Stack)。</p>
+<p>下一步，可以启用/禁用”FireWire SBP-2 fabric module”。这允许一台计算机作为一个硬盘连接到另一台计算机上。</p>
+<p>在这之后，我们可以配置”Fusion Message Passing Technology (MPT) device support”。</p>
+<p>在那个标题下的第一个选项是一个用于并口适配器的SCSI支持的驱动(Fusion MPT ScsiHost drivers for SPI)。</p>
+<p>SCSI同样也可以支持光纤通道主机适配器(Fusion MPT ScsiHost drivers for FC)和/或SAS适配器(Fusion MPT ScsiHost drivers for SAS)。</p>
+<p>下一步，用户可以设置”Maximum number of scatter gather entries”。一个低的数值可以减少每个控制器实例的内存消耗。</p>
+<p>下一个驱动提供了ioctl系统调用来管理MPT适配器(Fusion MPT misc device (ioctl) driver)。</p>
+<p>光纤通道端口可以用这个驱动支持IP LAN的流量(Fusion MPT LAN driver)。</p>
+<p>我可以读到你们的想法-你们会想到对于这个还有另外一篇文章。是的，你们想对了。请继续关注这个系列的下一篇文章。</p>
+<p>如果你喜欢这个系列，请在Linux.org和/或者Google+上发表评论告诉我你有多喜欢这个系列，并且告诉我你想在今后的文章中希望看到的方面。或者给我发邮件DevynCJohnson@Gmail.com)。谢谢！</p>
+<p>想要更多地了解作者，请检查下面的签名栏中的链接(译注：原文所在论坛有)</p>
+<p>如果你已经完整地阅读了这篇文章，那么你应该已经看到单词”Facebook”三次了。如果没有，你没有阅读全部文章。</p>
+<p>单词”Facebook”在这段中，上一段，和一个注解中。我打赌你阅读了上面的段落而没有通读文章来试图寻找第三个单词实例。</p>
+<hr>
+<p>via: <a href="http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-13.4714/" target="_blank" rel="external">http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-13.4714/</a></p>
+<p>译者：<a href="https://github.com/geekpi" target="_blank" rel="external">geekpi</a> 校对：<a href="https://github.com/wxy" target="_blank" rel="external">wxy</a></p>
+<p>本文由 <a href="https://github.com/LCTT/TranslateProject" target="_blank" rel="external">LCTT</a> 原创翻译，<a href="http://linux.cn/" target="_blank" rel="external">Linux中国</a> 荣誉推出</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/05/02/18 The Linux Kernel--Configuring the Kernel Part 14/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/05/02/16 The Linux Kernel--Configuring the Kernel Part 12/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="17 The Linux Kernel--Configuring the Kernel Part 13" data-title="" data-url="http://www.zky001.cn/2016/05/02/17 The Linux Kernel--Configuring the Kernel Part 13/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Markgolzh
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

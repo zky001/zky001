@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="戴文的Linux内核专题：27 配置内核 (23)
+欢迎来到内核配置的下一章！本篇中我们会配置密码API，虚拟化和运行库。密码学指的是在需要的计算机之间加密和安全通信的科学。用户可能加密数据以保证是收件人而不是黑客收到数据。
+Linux内核需要在内核中启用”Cryptographic algorithm manager”(密码算法管理器)。这个特性提供了操作内核的加密特性所需的软件。
+当启用这个它">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://www.zky001.cn/2016/05/02/27 The Linux Kernel--Configuring the Kernel Part 23/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="戴文的Linux内核专题：27 配置内核 (23)
+欢迎来到内核配置的下一章！本篇中我们会配置密码API，虚拟化和运行库。密码学指的是在需要的计算机之间加密和安全通信的科学。用户可能加密数据以保证是收件人而不是黑客收到数据。
+Linux内核需要在内核中启用”Cryptographic algorithm manager”(密码算法管理器)。这个特性提供了操作内核的加密特性所需的软件。
+当启用这个它">
+<meta property="og:image" content="http://www.linux.org/attachments/slide-jpg.735/.jpg">
+<meta property="og:updated_time" content="2015-12-01T03:16:33.965Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="戴文的Linux内核专题：27 配置内核 (23)
+欢迎来到内核配置的下一章！本篇中我们会配置密码API，虚拟化和运行库。密码学指的是在需要的计算机之间加密和安全通信的科学。用户可能加密数据以保证是收件人而不是黑客收到数据。
+Linux内核需要在内核中启用”Cryptographic algorithm manager”(密码算法管理器)。这个特性提供了操作内核的加密特性所需的软件。
+当启用这个它">
+<meta name="twitter:image" content="http://www.linux.org/attachments/slide-jpg.735/.jpg">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://avatars0.githubusercontent.com/u/16217370?v=3&amp;u=2144c8c49f4133187993121c83f24b1b35aebbd3&amp;s=140" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Markgolzh</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>Tags</li>
+						
+						<li>Links</li>
+						
+						
+						<li>Über</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/zky001" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/kaiyuan-zhnag" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/1134386961@qq.com" title="mail">mail</a>
+					        
+								<a class="facebook" target="_blank" href="https://www.facebook.com/profile.php?id=100006625267946" title="facebook">facebook</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Markgolzh</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="https://avatars0.githubusercontent.com/u/16217370?v=3&amp;u=2144c8c49f4133187993121c83f24b1b35aebbd3&amp;s=140" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Markgolzh</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/zky001" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/kaiyuan-zhnag" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/1134386961@qq.com" title="mail">mail</a>
+			        
+						<a class="facebook" target="_blank" href="https://www.facebook.com/profile.php?id=100006625267946" title="facebook">facebook</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-27 The Linux Kernel--Configuring the Kernel Part 23" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/02/27 The Linux Kernel--Configuring the Kernel Part 23/" class="article-date">
+  	<time datetime="2016-05-01T16:28:20.347Z" itemprop="datePublished">2016-05-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="戴文的Linux内核专题：27-配置内核-23"><a href="#戴文的Linux内核专题：27-配置内核-23" class="headerlink" title="戴文的Linux内核专题：27 配置内核 (23)"></a>戴文的Linux内核专题：27 配置内核 (23)</h1><p><img src="http://www.linux.org/attachments/slide-jpg.735/.jpg" alt=""></p>
+<p>欢迎来到内核配置的下一章！本篇中我们会配置密码API，虚拟化和运行库。密码学指的是在需要的计算机之间加密和安全通信的科学。用户可能加密数据以保证是收件人而不是黑客收到数据。</p>
+<p>Linux内核需要在内核中启用”Cryptographic algorithm manager”(密码算法管理器)。这个特性提供了操作内核的加密特性所需的软件。</p>
+<p>当启用这个它，用户空间提供了配置加密特性(Userspace cryptographic algorithm configuration)。注意:这个配置指的是内核运行时的加密设置，不是编译内核的工具。</p>
+<p>为了加强性能，启用这个会在加密算法中停止自我检测的特性 (Disable run-time self tests)。</p>
+<p>“GF(2^128) multiplication functions”是一种被一些密码使用特殊算法。GF代表的是” Galois field”(伽罗瓦域)，是一种有限数的集合。这写集合称之为域并且有不同的大小。</p>
+<p>“Null algorithms”是用于IPSec的算法。NULL加密意味这没有加密，因此这个驱动允许IPSec不使用加密。</p>
+<p>任意算法可以转换成并行算法(Parallel crypto engine)。这个特性提供了转换器。</p>
+<p>任意算法同样可以转换成异步算法(Software async crypto daemon)。</p>
+<p>IPsec需要”Authenc support”。”Authenc support”代表”Authenticated Encryption and offers multiple encryptions to IPsec”(认证加密并对IPSec提供多重加密)。</p>
+<p>CCM代表的是”Counter with CBC MAC”(CBC MAC计数器)，IPSec需要它(CCM support)。</p>
+<p>这个驱动提供了”GCM/GMAC support”。GCM意思是”Galois/Counter Mode”(伽罗瓦/计数器 模式)，GMAC是”Galois Message Authentication Code”(伽罗瓦消息验证码)。</p>
+<p>注意：我不会明确地解释一些特性的使用和细节。密码学是计算机中的特定领域，解释加密学超出了这篇文章的范围。</p>
+<p>“Sequence Number IV Generator”是一个被某些加密软件使用的特殊的号码生成器。</p>
+<p>Linux内核提供了不同的密码算法(CBC support)、 (CTR support)、 (CTS support)、 (ECB support)、 (LRW support)、 (PCBC support)、 (XTS support)、 (HMAC support)、 (XCBC support) 和 (VMAC support)。</p>
+<p>“CRC32c CRC algorithm” 明确被SPARC64处理器使用。</p>
+<p>“CRC32c INTEL hardware acceleration”是另外一个特定处理器的算法。它工作于带SSE4.2的Intel处理器。</p>
+<p>内核提供了很多摘要、密码和其他加密软件。通常上，默认允许它们除非你有特殊的理由来启用或禁用这些特性。</p>
+<p>注意：摘要(像MD5)会基于一个文件生成一个哈希值(字符序列)。哈希值接着被用于检查文件。比如，如果你从Canonical网站上下载了Ubuntu ISO安装盘，你可能想要知道你硬盘上的文件就是服务器上的文件的复制品。用户这么做的原因是ISO可能在长时间下载中被损坏。哈希值被用来证明文件没有被改变。</p>
+<p>注意：密码是一种加密/解密算法。加密是使文件对除了接受者/拥有者之外的人都不可读。解密是浏览加密文件的过程。</p>
+<p>Linux内核同样支持用户被强烈建议启用的不同的压缩算法(Deflate compression algorithm)、 (Zlib compression algorithm)  和 (LZO compression algorithm)。</p>
+<p>内核可以生成用于加密软件的随机数(Pseudo Random Number Generation for Cryptographic modules)、(User-space interface for hash algorithms) 和 (User-space interface for symmetric key cipher algorithms)。</p>
+<p>“Hardware crypto devices”是一个子菜单，包含了基于硬件加密工具的驱动。这个硬件在固件中含有算法。</p>
+<p>“Asymmetric (public-key cryptographic) key type” 菜单中存在着不同的非对称公开密钥。</p>
+<p>下面，我们可以进入配置工具主菜单(基于菜单接口)的下一个入口。虚拟化是寄放一个操作系统的<br>能力。这意味这Linux(和其他的系统)可以运行其他的操作系统，仿佛客户机是一个应用一样。</p>
+<p>“Kernel-based Virtual Machine (KVM) support”运行内核本身管理客户机。带Intel处理器的计算机需呀这个驱动(KVM for Intel processors support)，AMD的则需要(KVM for AMD processors support)。</p>
+<p>用于内核虚拟机(KVM)的内存管理单元(MMU)可以有一个审计系统。</p>
+<p>启用这个特性使客户机的网络变得更快(Host kernel accelerator for virtio net)。</p>
+<p>在配置哇内核虚拟机特性后，配置工具主菜单下的最后菜单是内核配置的最后一部分。这个菜单用于”Library Routines”(库运行时)，同样也成为库函数。一部分内核可以被作为可以链接的库。比如，XZ过滤(压缩算法)可以被外部程序访问。下面列出了不同的库。</p>
+<p>注意：CRC函数大多数都相同但有不同的特性和性能，通常来讲，最好启用这些特性。</p>
+<p>CRC-CCITT functions - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC16 functions - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC calculation for the T10 Data Integrity Field - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC ITU-T V.41 functions - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC32/CRC32c functions - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC32 perform self test on init - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC32 implementation (Slice by 8 bytes) - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC7 functions - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC32c (Castagnoli, et al) Cyclic Redundancy-Check - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>CRC8 function - 循环冗余校验测试(Cyclic Redundancy Check)用于测试原始数据中的改变。</p>
+<p>* BCJ filter decoder - 为特定处理器设计的XZ解码器，这里的”*”是处理器。内核列出了一些不同的架构。</p>
+<p>XZ decompressor tester - 用于测试XZ解码器的调试函数。</p>
+<p>Averaging functions - “uptime”在”uptime”中看到的平均负载。</p>
+<p>CORDIC algorithm - 双曲线和三角函数。</p>
+<p>JEDEC DDR data - JEDEC双倍数据速率SD-RAM规范</p>
+<p>你猜怎么了？我们已经完成配置内核。在23篇之后，我敢肯定这是你的感觉 -</p>
+<p>视频链接:<a href="http://www.youtube.com/embed/barWV7RWkq0?wmode=opaque" target="_blank" rel="external">http://www.youtube.com/embed/barWV7RWkq0?wmode=opaque</a></p>
+<p>下面，我们可以编译并安装了</p>
+<p>在遥远的地方，我仍然在听 - </p>
+<p>视频链接:<a href="http://www.youtube.com/embed/ELoUppY1esw?wmode=opaque" target="_blank" rel="external">http://www.youtube.com/embed/ELoUppY1esw?wmode=opaque</a></p>
+<hr>
+<p>via: <a href="http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-23.5112/" target="_blank" rel="external">http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-23.5112/</a></p>
+<p>译者：<a href="https://github.com/geekpi" target="_blank" rel="external">geekpi</a> 校对：<a href="https://github.com/wxy" target="_blank" rel="external">wxy</a></p>
+<p>本文由 <a href="https://github.com/LCTT/TranslateProject" target="_blank" rel="external">LCTT</a> 原创翻译，<a href="http://linux.cn/" target="_blank" rel="external">Linux中国</a> 荣誉推出</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/05/02/23 The Linux Kernel--Configuring the Kernel Part 19/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="27 The Linux Kernel--Configuring the Kernel Part 23" data-title="" data-url="http://www.zky001.cn/2016/05/02/27 The Linux Kernel--Configuring the Kernel Part 23/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Markgolzh
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

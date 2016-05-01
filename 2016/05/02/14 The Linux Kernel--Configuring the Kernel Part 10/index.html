@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="戴文的Linux内核专题：14 配置内核 (10)
+使用WiMAX协议的无线宽频设备可以启用这个(WiMAX Wireless Broadband support)。这个类型的无线连接通常需由服务供应商提供的连接服务才能工作(这与3G/4G的概念相同)。WiMAX代表”Worldwide Interoperability for Microwave Access”(微波存取全球互通)。WiMAX的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://www.zky001.cn/2016/05/02/14 The Linux Kernel--Configuring the Kernel Part 10/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="戴文的Linux内核专题：14 配置内核 (10)
+使用WiMAX协议的无线宽频设备可以启用这个(WiMAX Wireless Broadband support)。这个类型的无线连接通常需由服务供应商提供的连接服务才能工作(这与3G/4G的概念相同)。WiMAX代表”Worldwide Interoperability for Microwave Access”(微波存取全球互通)。WiMAX的">
+<meta property="og:image" content="http://www.linux.org/attachments/slide-jpg.514/">
+<meta property="og:updated_time" content="2015-12-01T03:16:33.953Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="戴文的Linux内核专题：14 配置内核 (10)
+使用WiMAX协议的无线宽频设备可以启用这个(WiMAX Wireless Broadband support)。这个类型的无线连接通常需由服务供应商提供的连接服务才能工作(这与3G/4G的概念相同)。WiMAX代表”Worldwide Interoperability for Microwave Access”(微波存取全球互通)。WiMAX的">
+<meta name="twitter:image" content="http://www.linux.org/attachments/slide-jpg.514/">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://avatars0.githubusercontent.com/u/16217370?v=3&amp;u=2144c8c49f4133187993121c83f24b1b35aebbd3&amp;s=140" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Markgolzh</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>Tags</li>
+						
+						<li>Links</li>
+						
+						
+						<li>Über</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/zky001" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/kaiyuan-zhnag" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/1134386961@qq.com" title="mail">mail</a>
+					        
+								<a class="facebook" target="_blank" href="https://www.facebook.com/profile.php?id=100006625267946" title="facebook">facebook</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Markgolzh</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="https://avatars0.githubusercontent.com/u/16217370?v=3&amp;u=2144c8c49f4133187993121c83f24b1b35aebbd3&amp;s=140" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Markgolzh</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/zky001" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/kaiyuan-zhnag" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/1134386961@qq.com" title="mail">mail</a>
+			        
+						<a class="facebook" target="_blank" href="https://www.facebook.com/profile.php?id=100006625267946" title="facebook">facebook</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-14 The Linux Kernel--Configuring the Kernel Part 10" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/02/14 The Linux Kernel--Configuring the Kernel Part 10/" class="article-date">
+  	<time datetime="2016-05-01T16:28:20.309Z" itemprop="datePublished">2016-05-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="戴文的Linux内核专题：14-配置内核-10"><a href="#戴文的Linux内核专题：14-配置内核-10" class="headerlink" title="戴文的Linux内核专题：14 配置内核 (10)"></a>戴文的Linux内核专题：14 配置内核 (10)</h1><p><img src="http://www.linux.org/attachments/slide-jpg.514/" alt=""></p>
+<p>使用WiMAX协议的无线宽频设备可以启用这个(WiMAX Wireless Broadband support)。这个类型的无线连接通常需由服务供应商提供的连接服务才能工作(这与3G/4G的概念相同)。WiMAX代表”Worldwide Interoperability for Microwave Access”(微波存取全球互通)。WiMAX的目的是代替DSL。宽频指的是宽的带宽和大量信号的传输。</p>
+<p>射频开关被用于许多Wifi和蓝牙卡中(RF switch subsystem support)。”RF”代表”Radio Frequency”。RF开关路由高频信号。</p>
+<p>RF开关输入支持同样也在内核中支持(RF switch input support)。</p>
+<p>内核可以控制并请求无线传输(Generic rfkill regulator driver)。启用这个生成一个设备文件(/dev/rfkill)。这个设备文件作为无线设备的接口。</p>
+<p>Linux内核支持9P2000协议(Plan 9 Resource Sharing Support (9P2000))。这个网络协议有时称作Styx。Plan 9的窗口系统(Rio)的Styx和Linux的X11都使用Unix网络套接字。Linux系统可能使用Styx在Styx网络中。Plan 9和Linux可以在一个网络中使用Styx</p>
+<p>“9P Virtio Transport”(9P 虚拟io传输)系统提供了在虚拟系统上客户机和主机分区间的传输。</p>
+<p>内核同样支持RDMA传输(9P RDMA Transport (Experimental))。RDMA代表的是”Remote Direct Memory Access”(远程内存直接访问)。这个Plan9上访问远程计算机内存的协议。</p>
+<p>9P系统与其他内核组件一样有调试特性(Debug information)。</p>
+<p>“CAIF support”支持同样可以在内核中启用。CAIF代表” Communication CPU to Application CPU Interface”(通信CPU到应用CPU接口)。这是一个使用数据包的多路复用(MUX)协议并被用于ST-Ericsson(意法爱立信)调制解调器中。ST-Ericsson是开发这个协议的公司(是的，MeeGo和Android是Linux系统，并且我正在讨论Google的Andorid)。MUX协议就是多路复用(multiplexing)协议。多路复用在前面的文章中已经提到过。</p>
+<p>下面，cephlib可以加入内核，它可以用于rados块设备(rbd)h和Ceph文件系统(Ceph核心库)(译注：Ceph是一种分布式文件系统)。cephlib是是Ceph的完整核心库。Ceph是存储平台。CephFs(Ceph文件系统)是运行在另外一个文件系统的顶部。通常，CephFs运行在EXT2、ZFS、XFS或者BTRFS上面。Rados设备是使用CephFs的块存储单元。</p>
+<p>ceph的调试特性会损害内核性能，所以只在需要的时候启用(Include file:line in ceph debug output)。<br>当启用这个选项(Use in-kernel support for DNS lookup)，CONFIG_DNS_RESOLVER设施会执行DNS查询。</p>
+<p>近场通信(Near Field Communication (NFC))设备在Linux内核中也被支持(NFC subsystem support)。</p>
+<p>如果上面的特性被启用，那么NFC控制器接口(NFC Controller Interface (NCI))也应该启用(NCI protocol support)。这允许主机和NFC控制器相互通信。</p>
+<p>NFC要处理HCI帧需要启用下面一个特性(NFC HCI implementation)。</p>
+<p>一些HCI驱动需要一个SHDLC链路层(SHDLC link layer)(SHDLC link layer for HCI based NFC drivers)。SHDLC是检测完整性和管理HCI帧顺序的协议。</p>
+<p>如果NFC特性启用了，那么通常也启用”NFC LLCP support”(就像上面那样)。</p>
+<p>接下来有一些为特别的NFC设备的驱动。第一个是”NXP PN533 USB driver”。</p>
+<p>下一个NFC驱动支持TI的BT/FM/GPS/NFC设备(Texas Instruments NFC WiLink driver)。</p>
+<p>下面的是”NXP PN544 NFC driver”。</p>
+<p>对于Inside Secure(译注：法国一家非接触半导体芯片厂商)生产的microread NFC芯片驱动同样在内核中支持(Inside Secure microread NFC driver)。</p>
+<p>现在，我们将继续配置与网络无关的驱动。首先我们可以选择uevent帮助程序的路径(path to uevent helper)。如今许多计算机不在需要这个特性因为一个uevent帮助程序会在每次执行时fork一个进程处理。这回很快地消耗资源。</p>
+<p>在启动时，内核会创建一个tmpfs/ramfs 文件系统(Maintain a devtmpfs filesystem to mount at /dev)。这个提供了完整的/dev目录系统。在这两个文件系统中(tmpfs和ramfs)，ramfs两者中最简单。”tmpfs”代表”temporary filesystem”(临时文件系统)，而”ramfs”代表”ram filesystem”(内存文件系统)。</p>
+<p>下一个设置是devtmpfs文件系统的代码，它同样挂载在/dev下(Automount devtmpfs at /dev, after the kernel mounted the rootfs)。</p>
+<p>下面的特性允许模块加载到用户空间(Userspace firmware loading support)。</p>
+<p>为了”Include in-kernel firmware blobs in kernel binary”(译注：将固件编译进内核)(这会增加专有固件到内核中)，就启用这个特性。</p>
+<p>一些二进制专有驱动需要在启动时使用。这个特性允许这类软件这么做(External firmware blobs to build into the kernel binary)。一些计算机有些引导设备需要只包含专有二进制文件的特殊固件。这个特性不启用，系统将无法引导。</p>
+<p>启用”Fallback user-helper invocation for firmware loading”，允许user-helper(用户助手) (udev)作为内核加载固件驱动失败的后备手段加载固件。udev可以加载驻留在非标准路径的固件。</p>
+<p>管理驱动的不跟内核如果被允许就可以生成调试信息(Driver Core verbose debug messages)。</p>
+<p>下一步，如果启用这个特性(Managed device resources verbose debug messages)，devres.log文件就可以使用。这是一个用于设备资源的调试系统。</p>
+<p>下面一个特性会通过netlink套接字生成一条用户空间和内核空间的连接(Connector - unified userspace &lt;-&gt; kernelspace linker)。这个套接字使用netlink协议。这是另外一个Linux系统即使在没有物理网络情况下仍需要网络特性的例子。</p>
+<p>用户空间可以通过套接字得到进城时间的通知(Report process events to userspace)。一些报告事件包含了ID改变、fork、和退出状态。一些先前启用的内核特性可能需要这个。最好按配置工具建议的那样设置。</p>
+<p>使用固态硬盘的系统需要MTD的支持(Memory Technology Device (MTD) support)。MTD设备是固态存储设备。典型的存储设备与固态硬盘(SSD)不同。用于磁盘单元的标准常规不适用于SSD(读、写、擦除)。</p>
+<p>大多数会桌面电脑带有并口(一个有25个洞的连接器)，所以他们需要这个特性(Parallel port support)。并口在其他许多鲜为人知的应用中通常用于打印机和ZIP驱动器。并口有25针。</p>
+<p>对IBM兼容计算机启用这个特性(PC-style hardware)。它们是不同类型的计算机。除了IBM计算机(通常运行Windows),还有苹果计算机。Linxu可以运行在几乎所有类型的计算机上。</p>
+<p>Linux同样支持Multi-IO PCI卡(Multi-IO cards (parallel and serial))。Multi-IO PCI卡同时拥有并口和串口。串口每次发送或接收1位数据。</p>
+<p>下一个特性允许内核”Use FIFO/DMA if available”。这用于特定的并口卡来加速打印。FIFO代表”First In, First Out”(先入先出)。DMA是先前提过的直接内存访问(Direct Memory Access)。</p>
+<p>下面一个特性用于探测Super-IO卡(SuperIO chipset support)。这些探针会发信中断号、DMA通道和其他类型设备的地址/数量。Super-IO是一种集成IO控制器类型。</p>
+<p>PCMCIA的并口支持可以启用(Support for PCMCIA management for PC-style ports)。</p>
+<p>注意：对于许多特性来说，你最好按照配置工具的建议除非你有特别的理由不这么做。通常地，如果你是交叉编译或者编译一个通用内核，那么你应该熟悉你想要支持的并做出相应的选择。</p>
+<p>在AX88796网络控制器的并口需要这个支持(AX88796 Parallel Port)。</p>
+<p>“IEEE 1284 transfer modes”在并口上支持增强型并口(Enhanced Parallel Port (EPP))和增强功能口(Enhanced Capability Port (ECP))并支持打印机状态回读。状态回读是检索打印机的状态。</p>
+<p>即插即用(“Plug and Play support” (PnP))应该启用。这允许用户在系统开机状态下插入设备并能马上使用它们。没有这个特性，用户不能使用USB设备、打印机或者其他没有执行特殊任务的设备。系统会自动管理复位(译注：原文是 “The system will manage the rest automatically”)。</p>
+<p>下面，用户可以启用块设备(Block devices)。这是一个应该启用的特性，因为块设备很常见。</p>
+<p>软驱也是可以启用的块设备(Normal floppy disk support)。</p>
+<p>连接到并口的IDE设备也同样支持(Parallel port IDE device support)。一些外部CD-ROM设备也能通过并口连接。</p>
+<p>外部IDE存储设备单元同样可以连接到并口(Parallel port IDE disks)。</p>
+<p>连接到并口的ATA包接口(ATA Packet Interface (ATAPI)) CD-ROM需要这个驱动(Parallel port ATAPI CD-ROMs)。ATAPI是用于并行ATA(PATA)设备的ATA协议扩展。</p>
+<p>还有一个ATAPI磁盘设备可以插到并口中(Parallel port ATAPI disks)。这个驱动会除了支持CD-ROM外还支持其他类型的磁盘。</p>
+<p>内核同样支持通过并口连接ATAPI磁带设备(Parallel port ATAPI tapes)。</p>
+<p>还有许多其他的ATAPI设备可以连接到并口中。结果就是，一个通用驱动被用于管理前面提到过的驱动不支持的设备(Parallel port generic ATAPI devices)。</p>
+<p>连接到并口上的IDE设备需要一个特殊的协议用于通信。有很多这样的协议，其中一个是”ATEN EH-100 protocol”。</p>
+<p>一个可选的用于并行IDE设备的协议是”MicroSolutions backpack (Series 5) protocol”。</p>
+<p>这里仍有另外一个并口IDE设备协议(DataStor Commuter protocol)和另一个(DataStor EP-2000 protocol)还有(FIT TD-2000 protocol)。</p>
+<p>再提一次，这里有另外一个协议，但是这个强烈建议用在更新的插在并口上的CD-ROM和PD/CD设备(FIT TD-3000 protocol)。</p>
+<p>下面的协议主要用于SyQuest、Avatar、Imation和HP生产的并口设备(Shuttle EPAT/EPEZ protocol)。</p>
+<p>Imation SuperDisks需要Shuttle EP1284芯片的支持(Support c7/c8 chips)。</p>
+<p>一些其他的并行IDE协议可以启用，包括：</p>
+<ul>
+<li>Shuttle EPIA protocol</li>
+<li>Freecom IQ ASIC-2 protocol - (用于Maxell Superdisks)</li>
+<li>FreeCom power protocol</li>
+<li>KingByte KBIC-951A/971A protocols</li>
+<li>KT PHd protocol - (用于2.5英寸外置并口硬盘)</li>
+<li>OnSpec 90c20 protocol</li>
+<li>OnSpec 90c26 protocol</li>
+</ul>
+<p>注意：这些协议以及支持的插入并口的设备意味着这些都类似于热插拔设备,就像USB设备插入USB端口一样。USB和火线人仍旧是使用最流行的端口,因为它们的大小和速度。一个并口设备单元大于USB闪存因为并口大于USB端口。</p>
+<p>下一步,我们有一个对于Micron PCIe的SSD驱动(Block Device Driver for Micron PCIe SSDs)。</p>
+<p>你可能已经猜到了- 下面的文章会讨论更多的配置.</p>
+<hr>
+<p>via: <a href="http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-10.4613/" target="_blank" rel="external">http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-10.4613/</a></p>
+<p>译者：<a href="https://github.com/geekpi" target="_blank" rel="external">geekpi</a> 校对：<a href="https://github.com/wxy" target="_blank" rel="external">wxy</a></p>
+<p>本文由 <a href="https://github.com/LCTT/TranslateProject" target="_blank" rel="external">LCTT</a> 原创翻译，<a href="http://linux.cn/" target="_blank" rel="external">Linux中国</a> 荣誉推出</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/05/02/15 The Linux Kernel--Configuring the Kernel Part 11/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/05/02/10 The Linux Kernel--Configuring the Kernel Part 6/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="14 The Linux Kernel--Configuring the Kernel Part 10" data-title="" data-url="http://www.zky001.cn/2016/05/02/14 The Linux Kernel--Configuring the Kernel Part 10/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Markgolzh
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

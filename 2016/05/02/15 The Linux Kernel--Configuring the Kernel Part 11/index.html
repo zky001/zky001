@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="戴文的Linux内核专题：15 配置内核 (11)
+准备好配置更多的驱动了么？还有很多要做。
+Linux支持两种不同的康柏智能阵列控制器：(Compaq SMART2 support)和(Compaq Smart Array 5xxx support)。阵列控制器是将物理存储单元表现为逻辑单元的设备。这些控制可能同样实现了基于硬件的RAID。硬件和软件RIAD的不同是简单的。Linux管理并见到软">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://www.zky001.cn/2016/05/02/15 The Linux Kernel--Configuring the Kernel Part 11/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="戴文的Linux内核专题：15 配置内核 (11)
+准备好配置更多的驱动了么？还有很多要做。
+Linux支持两种不同的康柏智能阵列控制器：(Compaq SMART2 support)和(Compaq Smart Array 5xxx support)。阵列控制器是将物理存储单元表现为逻辑单元的设备。这些控制可能同样实现了基于硬件的RAID。硬件和软件RIAD的不同是简单的。Linux管理并见到软">
+<meta property="og:image" content="http://www.linux.org/attachments/slide-jpg.530/">
+<meta property="og:updated_time" content="2015-12-01T03:16:33.954Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="戴文的Linux内核专题：15 配置内核 (11)
+准备好配置更多的驱动了么？还有很多要做。
+Linux支持两种不同的康柏智能阵列控制器：(Compaq SMART2 support)和(Compaq Smart Array 5xxx support)。阵列控制器是将物理存储单元表现为逻辑单元的设备。这些控制可能同样实现了基于硬件的RAID。硬件和软件RIAD的不同是简单的。Linux管理并见到软">
+<meta name="twitter:image" content="http://www.linux.org/attachments/slide-jpg.530/">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://avatars0.githubusercontent.com/u/16217370?v=3&amp;u=2144c8c49f4133187993121c83f24b1b35aebbd3&amp;s=140" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Markgolzh</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>Tags</li>
+						
+						<li>Links</li>
+						
+						
+						<li>Über</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/zky001" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/kaiyuan-zhnag" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/1134386961@qq.com" title="mail">mail</a>
+					        
+								<a class="facebook" target="_blank" href="https://www.facebook.com/profile.php?id=100006625267946" title="facebook">facebook</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Markgolzh</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="https://avatars0.githubusercontent.com/u/16217370?v=3&amp;u=2144c8c49f4133187993121c83f24b1b35aebbd3&amp;s=140" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Markgolzh</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/zky001" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/kaiyuan-zhnag" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/1134386961@qq.com" title="mail">mail</a>
+			        
+						<a class="facebook" target="_blank" href="https://www.facebook.com/profile.php?id=100006625267946" title="facebook">facebook</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-15 The Linux Kernel--Configuring the Kernel Part 11" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/02/15 The Linux Kernel--Configuring the Kernel Part 11/" class="article-date">
+  	<time datetime="2016-05-01T16:28:20.312Z" itemprop="datePublished">2016-05-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="戴文的Linux内核专题：15-配置内核-11"><a href="#戴文的Linux内核专题：15-配置内核-11" class="headerlink" title="戴文的Linux内核专题：15 配置内核 (11)"></a>戴文的Linux内核专题：15 配置内核 (11)</h1><p><img src="http://www.linux.org/attachments/slide-jpg.530/" alt=""></p>
+<p>准备好配置更多的驱动了么？还有很多要做。</p>
+<p>Linux支持两种不同的康柏智能阵列控制器：(Compaq SMART2 support)和(Compaq Smart Array 5xxx support)。阵列控制器是将物理存储单元表现为逻辑单元的设备。这些控制可能同样实现了基于硬件的RAID。硬件和软件RIAD的不同是简单的。Linux管理并见到软件RIAD。Linux将硬件RAID视为另外的存储单元。这意味着Linux没有意识到设备就是RAID驱动器。硬件(阵列控制器)独立于内核管理着RAID系统。这对于系统的性能更好因为内核不必配置或者管理RAID。注意，不同的阵列控制器有不同的RAID能力。</p>
+<p>上面提到的阵列控制器可以通过这个驱动访问SCSI磁带(SCSI tape drive support for Smart Array 5xxx)。SCSI磁带是使用SCSI协议的磁带机。</p>
+<p>PCI RAID控制器Mylex DAC960、AcceleRAID和eXtremeRAID在这个驱动中支持(Mylex DAC960/DAC1100 PCI RAID Controller support)。PCI RAID控制器是一个连接到PCI卡的阵列控制器。RAID控制器是拥有RAID功能的阵列控制器。</p>
+<p>带电源备份的MM5415内存芯片在这个驱动中支持(Micro Memory MM5415 Battery Backed RAM support)。带后备电源内存芯片允许数据在切断电源后继续保存在内存设备中。这有助于保护数据。不然，当电源断开后，当前的计算机会话就会丢失。</p>
+<p>当启用这个特性后，可以将典型的文件(比如ISO文件)作为一个块设备并挂载它Loopback device support)。这对于从镜像文件中检索文件而不必把文件烧录到光盘或者解压出来。想像一下你从因特网上得到了一份包含了很多文件的ISO文件。如果你只需要包中的一个文件并且用户不希望烧写ISO到光盘上或者不想知道如何打开一个ISO文件。用户可以用挂载ISO来替代。</p>
+<p>Linux内核在初始化阶段会创建一些回路设备，所以一些回环设备已经准备好并创建了(Number of loop devices to pre-create at init time)。当一个文件(像ISO)或者虚拟设备(就像虚拟磁盘驱动器[vhd])被作为回环设备挂载时会节约一些时间。这个设定允许开发者选择内核可以预<br>创建多少回环设备。</p>
+<p>当”Cryptoloop Support”启用后就可以CryptoAPI创建密码。这个用于硬件驱动器加密。然而，并不是所有的文件系统都支持。</p>
+<p>下面用户可以启用”DRBD Distributed Replicated Block Device support”(译注：Linux上的分布存储系统)。这个就像网络RAID1。这些设备拥有设备文件/dev/drbdx。这些设备通常被用于集群，这里集群中的每台计算机都有一个从主单元镜像过来的存储单元。这意味着每台计算机的硬盘是位于组中心计算机硬盘的镜像拷贝。集群是一组计算机扮演着一台大型强力单元的角色。然而，每个集群都有一台控制计算机称为主节点。余下的计算机是从节点。</p>
+<p>DRBD支持用于测试IO错误处理的故障注射(DRBD fault injection)。记住，故障注射就是使设备/软件认为发生了一个错误，因此开发者可以测试硬件/软件如何处理错误</p>
+<p>如果内核要成为网络块设备的客户端，那么启用这个特性(Network block device support)。第一个设备文件是/dev/nd0。网络块设备是通过网络访问的远程存储单元。</p>
+<p>直接连接SSD到PCI或者PCIe需要这个驱动(NVM Express block device)。</p>
+<p>用这个特性允许将单独的SCSI OSD(object-based storage,基于对象的存储)对象作为块设备(OSD object-as-blkdev support)。</p>
+<p>下一个驱动是”Promise SATA SX8 support”。这个驱动用于Promise公司(Promise Technology Inc.)生产的SATA控制器。</p>
+<p>Linux允许将一部分内存作为块设备(RAM block device support)。这通常见与完全运行于内存上的Linux的live发行版。Linux的live发行版会卸载光盘并接着加载到内存中，所以在尝试一个新的操作系统或者修复另一个系统时不会伤害到已安装的系统。</p>
+<p>下一个选项允许用户输入”Default number of RAM disks”(默认RAM磁盘数量)。</p>
+<p>“Default RAM disk size”(默认RAM磁盘大小)可以以KB设置大小。</p>
+<p>内核可以支持在内存设备的XIP文件系统作为块设备(Support XIP filesystems on RAM block device)。这个特性会增大内核的大小。 XIP (eXecute In Place)文件系统是一个允许可执行文件在相同的文件系统上存储数据而不必像其他应用一样利用内存。在一个驻留在内存上的live版linux系统上运行可执行文件时需要这个文件系统。</p>
+<p>下面，内核可以支持”Packet writing on CD/DVD media”。(CD/DVD刻录机支持.)</p>
+<p>内核开发者可以设置最大活跃并发包数量(Free buffers for data gathering)。大的数字会以内存的消耗为代价加速写入性能。一个包会消耗大约64KB。</p>
+<p>Linux内核可以使用可擦写光盘作为缓存空间(Enable write caching)。这个特性仍然是试验性质。</p>
+<p>下面的特性允许通过以太网线缆使用ATA规范(ATA over Ethernet support)。</p>
+<p>下面的驱动允许虚拟块设备创建为virtio(Virtio block driver)。virtio是IO虚拟化平台。</p>
+<p>一些非常老的硬盘还要一个特殊的驱动(Very old hard disk (MFM/RLL/IDE) driver)。</p>
+<p>这里有一个驱动用于先前提到的Rados设备(Rados block device (RBD))。</p>
+<p>下面是一个特殊的设备驱动(IBM FlashSystem 70/80 PCIe SSD Device Driver)。</p>
+<p>现在，我们可以进入杂项设备。第一个设定是启用/禁用电位器(Analog Devices Digital Potentiometers )。</p>
+<p>如果电位器在I2C总线上，那么就启用这个(support I2C bus connection)。</p>
+<p>如果电位器是连接到SPI总线，那么需要这个驱动(support SPI bus connection)。</p>
+<p>注意:Linux内核支持很多传感器因为Linux内核经常用于天气设备和机器人。</p>
+<p>这个驱动用于IBM RSA(Condor)服务处理器(Device driver for IBM RSA service processor)。</p>
+<p>内核同样支持PCI Sensable PHANToM设备驱动(Sensable PHANToM (PCI))。</p>
+<p>这个驱动指引不同来自并行追踪接口(Parallel Trace Interface (PTI))的追踪数据发往Intel Penwell PTI口 (Parallel Trace Interface for MIPI P1149.7 cJTAG standard)。这个被指领的数据用于调试目的。</p>
+<p>一些带有IOC4芯片的SGI IO控制器需要这个驱动(SGI IOC4 Base IO support)。SGI IO是由SCI管理的输入/输出设备。IOC4芯片控制着许多由这些设备执行的任务。这是一个基础驱动。其他对这些设备的驱动依赖于这个驱动。</p>
+<p>这里有很少的TI闪存媒体适配器驱动在Linux内核中，(TI Flash Media interface support) 和(TI Flash Media PCI74xx/PCI76xx host adapter support)。</p>
+<p>这个驱动(“Integrated Circuits ICS932S401”)用于ICS932S401时钟控制芯片。</p>
+<p>Atmel同步串行通信外设(Synchronized Serial Communication peripheral (SSC))有一个驱动在内核中(Device driver for Atmel SSC peripheral)。这个设备提供点对点的设备间的串行连接。</p>
+<p>“Enclosure Services”特性支持硬盘托架。</p>
+<p>这是对于CS5535/CS5536芯片的定时器驱动(CS5535/CS5536 Geode Multi-Function General Purpose Timer (MFGPT) support)。</p>
+<p>这个驱动让应用可以与HP工业标准服务器中的iLO管理处理器通信(Channel interface driver for the HP iLO processor)。”iLO”代表的是”Integrity Integrated Lights-Out”.iLO允许远程服务器管理。</p>
+<p>Linux内核支持ALS APDS9802光敏传感器(Medfield Avago APDS9802 ALS Sensor module)。一些其他支持的传感器包括：</p>
+<ul>
+<li>Intersil ISL29003 ambient light sensor</li>
+<li>Intersil ISL29020 ambient light sensor</li>
+<li>Taos TSL2550 ambient light sensor</li>
+<li>ROHM BH1780GLI ambient light sensor</li>
+<li>BH1770GLC / SFH7770 combined ALS - Proximity sensor</li>
+<li>APDS990X combined als and proximity sensors</li>
+</ul>
+<p>注意：如果内核是为广泛的计算机编译的话，大多数驱动应该以模块形式加入。</p>
+<p>Linux甚至可以使用”Honeywell HMC6352 compass”(一种电子罗盘)。</p>
+<p>内核同样支持”Dallas DS1682 Total Elapsed Time Recorder with Alarm”。(一种运行时间记录仪)</p>
+<p>16位的数模转换器通过这个驱动支持(Texas Instruments DAC7512)。</p>
+<p>“VMware Balloon Driver”将客户机操作系统不需要的物理内存页交给需要那些需要的。</p>
+<p>这里有两个不同的压力传感器(BMP085 digital pressure sensor on I2C) 和 (BMP085 digital pressure sensor on SPI)。</p>
+<p>Intel输入/输出集线器(Intel Input/Output Hub (IOH))同样在内核中支持(Intel EG20T PCH/LAPIS Semicon IOH(ML7213/ML7223/ML7831) PHUB)。具体地说，这个是Intel Topcliff芯片组的PCH PHUB(Platform Controller Hub Packet Hub)</p>
+<p>“FSA9480 USB Switch”是检测设备何时插入的检测器。</p>
+<p>下一个选项允许比特流配置(Lattice ECP3 FPGA bitstream configuration via SPI)。</p>
+<p>Silicon微控制器使用Silicon实验室C2端口，这需要一个特殊的驱动(Silicon Labs C2 port support)。</p>
+<p>再说一次，继续留意下一篇文章因为我们还有更多的要做。</p>
+<hr>
+<p>via: <a href="http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-11.4640/" target="_blank" rel="external">http://www.linux.org/threads/the-linux-kernel-configuring-the-kernel-part-11.4640/</a></p>
+<p>译者：<a href="https://github.com/geekpi" target="_blank" rel="external">geekpi</a> 校对：<a href="https://github.com/wxy" target="_blank" rel="external">wxy</a></p>
+<p>本文由 <a href="https://github.com/LCTT/TranslateProject" target="_blank" rel="external">LCTT</a> 原创翻译，<a href="http://linux.cn/" target="_blank" rel="external">Linux中国</a> 荣誉推出</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/05/02/16 The Linux Kernel--Configuring the Kernel Part 12/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/05/02/14 The Linux Kernel--Configuring the Kernel Part 10/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="15 The Linux Kernel--Configuring the Kernel Part 11" data-title="" data-url="http://www.zky001.cn/2016/05/02/15 The Linux Kernel--Configuring the Kernel Part 11/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Markgolzh
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
